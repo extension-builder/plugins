@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- default paths of admin_view form points to componentbuilder -->
+<form>
+	<fields name="params">
+	<!-- default paths of privacy fieldset points to the plugin -->
+	<fieldset name="privacy" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_PRIVACY"
+		addruleprefix="VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Rule"
+		addfieldprefix="VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Field"
+	>
+	<fields name="privacy">
+		<!-- Note_plugin_actions Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_plugin_actions" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_ACTIONS_LABEL" description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_ACTIONS_DESCRIPTION" heading="h3" class="alert alert-info note_plugin_actions" />
+		<!-- Activate Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="activate"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_ACTIVATE_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_ACTIVATE_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NO</option>
+		</field>
+		<!-- Note_plugin_permission Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_plugin_permission" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_PERMISSION_LABEL" description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_PERMISSION_DESCRIPTION" heading="h4" class="alert alert-info note_plugin_permission" showon="activate:1" />
+		<!-- Permissions Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="permissions"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_PERMISSIONS_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_PERMISSIONS_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1"
+			required="true"
+			showon="activate:1">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NO</option>
+		</field>
+		<!-- Note_plugin_anonymize Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_plugin_anonymize" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_ANONYMIZE_LABEL" description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_ANONYMIZE_DESCRIPTION" heading="h4" class="alert alert-info note_plugin_anonymize" showon="activate:1" />
+		<!-- Anonymize Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="anonymize"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_ANONYMIZE_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_ANONYMIZE_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true"
+			showon="activate:1">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NO</option>
+		</field>
+		<!-- Anonymize_fields Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="anonymize_fields"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_ANONYMIZE_FIELDS_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			icon="list"
+			max="50"
+			showon="activate:1[AND]anonymize:1">
+			<form hidden="true" name="list_anonymize_fields_modal" repeat="true">
+				<!-- Field Field. Type: Targetfields. (custom) -->
+				<field
+					type="targetfields"
+					name="field"
+					label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_FIELD_LABEL"
+					button="false"
+				/>
+				<!-- Value Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="value"
+					label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_VALUE_LABEL"
+					size="10"
+					maxlength="50"
+					description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_VALUE_DESCRIPTION"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+			</form>
+		</field>
+		<!-- Note_plugin_user_link Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_plugin_user_link" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_USER_LINK_LABEL" description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_PLUGIN_USER_LINK_DESCRIPTION" heading="h4" class="alert alert-info note_plugin_user_link" showon="activate:1" />
+		<!-- User_link Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="user_link"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_USER_LINK_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_USER_LINK_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1"
+			required="true"
+			showon="activate:1">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_CREATED_BY</option>
+			<option value="2">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_OTHER_USER_FIELD</option>
+			<option value="3">
+				PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_CUSTOM</option>
+		</field>
+		<!-- Custom_link Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="custom_link"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_CUSTOM_LINK_LABEL"
+			default="$query->where($db->quoteName('created_by') . ' = ' . $db->quote($user->id));"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_CUSTOM_LINK_DESCRIPTION"
+			width="100%"
+			height="80px"
+			cols="15"
+			rows="30"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			validate="code"
+			showon="activate:1[AND]user_link:3"
+		/>
+		<!-- Other_user_field Field. Type: Targetfields. (custom) -->
+		<field
+			type="targetfields"
+			name="other_user_field"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_OTHER_USER_FIELD_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_OTHER_USER_FIELD_DESCRIPTION"
+			showon="activate:1[AND]user_link:2"
+		/>
+	</fields>
+	</fieldset>
+	</fields>
+</form>

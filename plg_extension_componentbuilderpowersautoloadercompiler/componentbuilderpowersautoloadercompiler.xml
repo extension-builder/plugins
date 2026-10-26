@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="5.0" group="extension" method="upgrade">
+	<name>PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER</name>
+	<creationDate>8th October, 2026</creationDate>
+	<author>Llewellyn van der Merwe</author>
+	<authorEmail>joomla@vdm.io</authorEmail>
+	<authorUrl>https://dev.vdm.io</authorUrl>
+	<copyright>Copyright (C) 2015 Vast Development Method. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>6.0.0</version>
+	<namespace path="src">VDM\Plugin\Extension\ComponentbuilderPowersAutoloaderCompiler</namespace>
+	<description>PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile>script.php</scriptfile>
+
+	<!-- Language files -->
+	<languages folder="language">
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderpowersautoloadercompiler.ini</language>
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderpowersautoloadercompiler.sys.ini</language>
+		<language tag="af-ZA">af-ZA/plg_extension_componentbuilderpowersautoloadercompiler.ini</language>
+		<language tag="af-ZA">af-ZA/plg_extension_componentbuilderpowersautoloadercompiler.sys.ini</language>
+	</languages>
+
+	<!-- Plugin files -->
+	<files>
+		<folder plugin="componentbuilderpowersautoloadercompiler">services</folder>
+		<filename>index.html</filename>
+		<folder>services</folder>
+		<folder>src</folder>
+	</files>
+
+	<!-- Config parameters -->
+	<config>
+	<fields name="params">
+	<fieldset name="basic" label="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_GLOBAL_AUTOLOADER">
+		<!-- Note_select_power_plugin Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_select_power_plugin" label="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_NOTE_SELECT_POWER_PLUGIN_LABEL" description="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_NOTE_SELECT_POWER_PLUGIN_DESCRIPTION" heading="h4" class="alert alert-info note_select_power_plugin" />
+		<!-- Plugin Field. Type: Joomlaplugins. (custom) -->
+		<field
+			type="joomlaplugins"
+			name="plugin"
+			label="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_PLUGIN_LABEL"
+			layout="joomla.form.field.list-fancy-select"
+			multiple="false"
+			default="0"
+			button="true"
+		/>
+		<!-- Activate_option Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="activate_option"
+			label="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_ACTIVATE_OPTION_LABEL"
+			description="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_ACTIVATE_OPTION_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_ALL</option>
+			<option value="2">
+				PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_SELECTED</option>
+		</field>
+		<!-- Components Field. Type: Joomlacomponents. (custom) -->
+		<field
+			type="joomlacomponents"
+			name="components"
+			label="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_COMPONENTS_LABEL"
+			description="PLG_EXTENSION_COMPONENTBUILDERPOWERSAUTOLOADERCOMPILER_COMPONENTS_DESCRIPTION"
+			class="list_class"
+			multiple="true"
+			default="0"
+			showon="activate_option:2"
+			button="false"
+		/>
+	</fieldset>
+	</fields>
+	</config>
+</extension>

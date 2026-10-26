@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="6.0" group="extension" method="upgrade">
+	<name>PLG_EXTENSION_COMPONENTBUILDERLANGUAGEPACKAGING</name>
+	<creationDate>8th October, 2026</creationDate>
+	<author>Llewellyn van der Merwe</author>
+	<authorEmail>joomla@vdm.io</authorEmail>
+	<authorUrl>https://dev.vdm.io</authorUrl>
+	<copyright>Copyright (C) 2015 Vast Development Method. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>6.0.0</version>
+	<namespace path="src">VDM\Plugin\Extension\ComponentbuilderLanguagePackaging</namespace>
+	<description>PLG_EXTENSION_COMPONENTBUILDERLANGUAGEPACKAGING_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile>script.php</scriptfile>
+
+	<!-- Language files -->
+	<languages folder="language">
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderlanguagepackaging.ini</language>
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderlanguagepackaging.sys.ini</language>
+		<language tag="af-ZA">af-ZA/plg_extension_componentbuilderlanguagepackaging.ini</language>
+		<language tag="af-ZA">af-ZA/plg_extension_componentbuilderlanguagepackaging.sys.ini</language>
+	</languages>
+
+	<!-- Plugin files -->
+	<files>
+		<folder plugin="componentbuilderlanguagepackaging">services</folder>
+		<filename>index.html</filename>
+		<folder>services</folder>
+		<folder>src</folder>
+	</files>
+</extension>

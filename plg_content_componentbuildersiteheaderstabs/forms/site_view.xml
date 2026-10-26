@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- default paths of site_view form points to componentbuilder -->
+<form
+	addruleprefix="VDM\Component\Componentbuilder\Administrator\Rule"
+	addfieldprefix="VDM\Component\Componentbuilder\Administrator\Field"
+>
+	<fields name="params">
+	<fieldset name="site_view_headers" label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_CLASS_HEADERS">
+	<fields name="site_view_headers">
+		<!-- Add_site_view_model Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_view_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_MODEL_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_MODEL_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_view_model Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_view_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_MODEL_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_MODEL_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_view_model:1"
+		/>
+		<!-- Power_site_view_model Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_view_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_MODEL_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_MODEL_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_view_model:1">
+			<form hidden="true" name="list_power_site_view_model_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_view_html Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_view_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_HTML_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_HTML_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_view_html Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_view_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_HTML_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_HTML_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_view_html:1"
+		/>
+		<!-- Power_site_view_html Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_view_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_HTML_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_HTML_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_view_html:1">
+			<form hidden="true" name="list_power_site_view_html_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_view Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_view"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_view Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_view"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_view:1"
+		/>
+		<!-- Power_site_view Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_view"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_view:1">
+			<form hidden="true" name="list_power_site_view_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_view_controller Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_view_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_CONTROLLER_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEW_CONTROLLER_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_view_controller Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_view_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_CONTROLLER_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEW_CONTROLLER_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_view_controller:1"
+		/>
+		<!-- Power_site_view_controller Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_view_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_CONTROLLER_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEW_CONTROLLER_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_view_controller:1">
+			<form hidden="true" name="list_power_site_view_controller_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_views_model Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_views_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_MODEL_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_MODEL_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_views_model Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_views_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_MODEL_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_MODEL_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_views_model:1"
+		/>
+		<!-- Power_site_views_model Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_views_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_MODEL_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_MODEL_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_views_model:1">
+			<form hidden="true" name="list_power_site_views_model_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_views_html Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_views_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_HTML_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_HTML_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_views_html Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_views_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_HTML_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_HTML_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_views_html:1"
+		/>
+		<!-- Power_site_views_html Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_views_html"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_HTML_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_HTML_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_views_html:1">
+			<form hidden="true" name="list_power_site_views_html_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_views Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_views"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_views Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_views"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_views:1"
+		/>
+		<!-- Power_site_views Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_views"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_views:1">
+			<form hidden="true" name="list_power_site_views_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_site_views_controller Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_site_views_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_CONTROLLER_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_SITE_VIEWS_CONTROLLER_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Site_views_controller Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="site_views_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_CONTROLLER_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_SITE_VIEWS_CONTROLLER_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_site_views_controller:1"
+		/>
+		<!-- Power_site_views_controller Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_site_views_controller"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_CONTROLLER_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_SITE_VIEWS_CONTROLLER_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_site_views_controller:1">
+			<form hidden="true" name="list_power_site_views_controller_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_ajax_model Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_ajax_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ADD_AJAX_MODEL_LABEL"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_NO</option>
+		</field>
+		<!-- Ajax_model Field. Type: Editor. (joomla) -->
+		<field
+			type="editor"
+			name="ajax_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AJAX_MODEL_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AJAX_MODEL_DESCRIPTION"
+			width="100%"
+			height="100px"
+			cols="15"
+			rows="10"
+			buttons="no"
+			syntax="php"
+			editor="codemirror|none"
+			filter="raw"
+			required="false"
+			validate="code"
+			showon="add_ajax_model:1"
+		/>
+		<!-- Power_ajax_model Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="power_ajax_model"
+			label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_AJAX_MODEL_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			description="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_AJAX_MODEL_DESCRIPTION"
+			icon="list"
+			max="50"
+			showon="add_ajax_model:1">
+			<form hidden="true" name="list_power_ajax_model_modal" repeat="true">
+				<!-- Power Field. Type: Powers. (custom) -->
+				<field
+					type="powers"
+					name="power"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_POWER_LABEL"
+					class="list_class span12"
+					layout="joomla.form.field.list-fancy-select"
+					multiple="false"
+					default="0"
+					button="false"
+				/>
+				<!-- As Field. Type: Text. (joomla) -->
+				<field
+					type="text"
+					name="as"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_AS_LABEL"
+					size="10"
+					maxlength="50"
+					default="default"
+					class="text_area"
+					filter="STRING"
+					autocomplete="on"
+				/>
+				<!-- Build Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="build"
+					label="PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BUILD_LABEL"
+					class="list_class"
+					multiple="false"
+					default="2">
+					<!-- Option Set. -->
+					<option value="1">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_ALWAYS</option>
+					<option value="2">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_BASED_ON_COMPONENT</option>
+					<option value="6">
+						PLG_CONTENT_COMPONENTBUILDERSITEHEADERSTABS_EXCLUDE</option>
+				</field>
+			</form>
+		</field>
+	</fields>
+	</fieldset>
+	</fields>
+</form>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- default paths of joomla_component form points to componentbuilder -->
+<form>
+	<fields name="params">
+	<!-- default paths of language_options fieldset points to the plugin -->
+	<fieldset name="language_options" label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_LANGUAGE_OPTIONS"
+		addruleprefix="VDM\Plugin\Content\ComponentbuilderLanguageTabs\Rule"
+		addfieldprefix="VDM\Plugin\Content\ComponentbuilderLanguageTabs\Field"
+	>
+	<fields name="language_options">
+		<!-- Note_language_note Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_language_note" label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_NOTE_LANGUAGE_NOTE_LABEL" description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_NOTE_LANGUAGE_NOTE_DESCRIPTION" heading="h2" class="alert alert-info note_language_note" />
+		<!-- Activate Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="activate"
+			label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_ACTIVATE_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_ACTIVATE_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_NO</option>
+		</field>
+		<!-- Use_percentagelanguageadd Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="use_percentagelanguageadd"
+			label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_USE_PERCENTAGELANGUAGEADD_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_USE_PERCENTAGELANGUAGEADD_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1"
+			showon="activate:1">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_GLOBAL</option>
+			<option value="2">
+				PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_LOCAL</option>
+		</field>
+		<!-- Percentagelanguageadd Field. Type: Number. (joomla) -->
+		<field
+			type="number"
+			name="percentagelanguageadd"
+			label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_PERCENTAGELANGUAGEADD_LABEL"
+			default="50"
+			description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_PERCENTAGELANGUAGEADD_DESCRIPTION"
+			class="text_area"
+			min="10"
+			max="100"
+			step="10"
+			showon="use_percentagelanguageadd:2[AND]activate:1"
+		/>
+		<!-- Note_languages_keep Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_languages_keep" label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_NOTE_LANGUAGES_KEEP_LABEL" description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_NOTE_LANGUAGES_KEEP_DESCRIPTION" heading="h2" class="alert alert-info note_languages_keep" showon="activate:1" />
+		<!-- Languages Field. Type: Excludedlanguages. (custom) -->
+		<field
+			type="excludedlanguages"
+			name="languages"
+			label="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_LANGUAGES_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERLANGUAGETABS_LANGUAGES_DESCRIPTION"
+			class="list_class"
+			layout="joomla.form.field.list-fancy-select"
+			multiple="true"
+			default="en-GB"
+			showon="activate:1"
+			button="true"
+		/>
+	</fields>
+	</fieldset>
+	</fields>
+</form>

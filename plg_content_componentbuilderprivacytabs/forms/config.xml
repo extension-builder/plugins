@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- default paths of config form points to componentbuilder -->
+<form>
+	<fields name="params">
+	<!-- default paths of plugin fieldset points to the plugin -->
+	<fieldset name="plugin" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_PLUGIN"
+		addruleprefix="VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Rule"
+		addfieldprefix="VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Field"
+	>
+		<!-- Note_select_privacy_plugin Field. Type: Note. A None Database Field. (joomla) -->
+		<field type="note" name="note_select_privacy_plugin" label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_SELECT_PRIVACY_PLUGIN_LABEL" description="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_NOTE_SELECT_PRIVACY_PLUGIN_DESCRIPTION" heading="h4" class="alert alert-info note_select_privacy_plugin" />
+		<!-- Plugin Field. Type: Joomlaplugins. (custom) -->
+		<field
+			type="joomlaplugins"
+			name="plugin"
+			label="PLG_CONTENT_COMPONENTBUILDERPRIVACYTABS_PLUGIN_LABEL"
+			layout="joomla.form.field.list-fancy-select"
+			multiple="false"
+			default="0"
+			button="true"
+		/>
+	</fieldset>
+	</fields>
+</form>

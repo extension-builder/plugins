@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="6.0" group="extension" method="upgrade">
+	<name>PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER</name>
+	<creationDate>8th October, 2026</creationDate>
+	<author>Llewellyn van der Merwe</author>
+	<authorEmail>joomla@vdm.io</authorEmail>
+	<authorUrl>https://dev.vdm.io</authorUrl>
+	<copyright>Copyright (C) 2015 Vast Development Method. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>6.0.0</version>
+	<namespace path="src">VDM\Plugin\Extension\ComponentbuilderActionLogCompiler</namespace>
+	<description>PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile>script.php</scriptfile>
+
+	<!-- Language files -->
+	<languages folder="language">
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderactionlogcompiler.ini</language>
+		<language tag="en-GB">en-GB/plg_extension_componentbuilderactionlogcompiler.sys.ini</language>
+	</languages>
+
+	<!-- Plugin files -->
+	<files>
+		<folder plugin="componentbuilderactionlogcompiler">services</folder>
+		<filename>index.html</filename>
+		<folder>services</folder>
+		<folder>src</folder>
+	</files>
+
+	<!-- Config parameters -->
+	<config
+			addruleprefix="VDM\Component\Componentbuilder\Administrator\Rule"
+			addfieldprefix="VDM\Component\Componentbuilder\Administrator\Field">
+	>
+	<fields name="params">
+	<fieldset name="activate" label="PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_COMPONENT_ACTIVATION">
+		<!-- Activate_option Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="activate_option"
+			label="PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_ACTIVATE_OPTION_LABEL"
+			description="PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_ACTIVATE_OPTION_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="1"
+			required="true">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_ALL</option>
+			<option value="2">
+				PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_SELECTED</option>
+		</field>
+		<!-- Components Field. Type: Joomlacomponents. (custom) -->
+		<field
+			type="joomlacomponents"
+			name="components"
+			label="PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_COMPONENTS_LABEL"
+			description="PLG_EXTENSION_COMPONENTBUILDERACTIONLOGCOMPILER_COMPONENTS_DESCRIPTION"
+			class="list_class"
+			multiple="true"
+			default="0"
+			showon="activate_option:2"
+			button="false"
+		/>
+	</fieldset>
+	</fields>
+	</config>
+</extension>

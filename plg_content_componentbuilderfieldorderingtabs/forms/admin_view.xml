@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- default paths of admin_view form points to componentbuilder -->
+<form>
+	<fields name="params">
+	<!-- default paths of fieldordering fieldset points to the plugin -->
+	<fieldset name="fieldordering" label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_FIELD_ORDERING"
+		addruleprefix="VDM\Plugin\Content\ComponentbuilderFieldOrderingTabs\Rule"
+		addfieldprefix="VDM\Plugin\Content\ComponentbuilderFieldOrderingTabs\Field"
+	>
+	<fields name="fieldordering">
+		<!-- Add_admin_ordering Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_admin_ordering"
+			label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ADD_ADMIN_ORDERING_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ADD_ADMIN_ORDERING_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_NO</option>
+		</field>
+		<!-- Admin_ordering_fields Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="admin_ordering_fields"
+			label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ADMIN_ORDERING_FIELDS_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			icon="list"
+			max="5"
+			min="1"
+			showon="add_admin_ordering:1">
+			<form hidden="true" name="list_admin_ordering_fields_modal" repeat="true">
+				<!-- Field Field. Type: Adminlistvieworderfields. (custom) -->
+				<field
+					type="adminlistvieworderfields"
+					name="field"
+					label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_FIELD_LABEL"
+					class="fieldLarge"
+					multiple="false"
+					button="false"
+				/>
+				<!-- Direction Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="direction"
+					label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_DIRECTION_LABEL"
+					class="list_class fieldLarge"
+					multiple="false"
+					filter="WORD"
+					default="asc">
+					<!-- Option Set. -->
+					<option value="asc">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ASCENDING</option>
+					<option value="desc">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_DESCENDING</option>
+					<option value="rand">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_RANDOM</option>
+				</field>
+			</form>
+		</field>
+		<!-- Add_linked_ordering Field. Type: Radio. (joomla) -->
+		<field
+			type="radio"
+			name="add_linked_ordering"
+			label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ADD_LINKED_ORDERING_LABEL"
+			description="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ADD_LINKED_ORDERING_DESCRIPTION"
+			class="btn-group btn-group-yesno"
+			default="0">
+			<!-- Option Set. -->
+			<option value="1">
+				PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_YES</option>
+			<option value="0">
+				PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_NO</option>
+		</field>
+		<!-- Linked_ordering_fields Field. Type: Subform. (joomla) -->
+		<field
+			type="subform"
+			name="linked_ordering_fields"
+			label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_LINKED_ORDERING_FIELDS_LABEL"
+			layout="joomla.form.field.subform.repeatable-table"
+			multiple="true"
+			buttons="add,remove,move"
+			icon="list"
+			max="5"
+			min="1"
+			showon="add_linked_ordering:1">
+			<form hidden="true" name="list_linked_ordering_fields_modal" repeat="true">
+				<!-- Field Field. Type: Linkedviewsorderfields. (custom) -->
+				<field
+					type="linkedviewsorderfields"
+					name="field"
+					label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_FIELD_LABEL"
+					class="fieldLarge"
+					multiple="false"
+					button="false"
+				/>
+				<!-- Direction Field. Type: List. (joomla) -->
+				<field
+					type="list"
+					name="direction"
+					label="PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_DIRECTION_LABEL"
+					class="list_class fieldLarge"
+					multiple="false"
+					filter="WORD"
+					default="asc">
+					<!-- Option Set. -->
+					<option value="asc">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_ASCENDING</option>
+					<option value="desc">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_DESCENDING</option>
+					<option value="rand">
+						PLG_CONTENT_COMPONENTBUILDERFIELDORDERINGTABS_RANDOM</option>
+				</field>
+			</form>
+		</field>
+	</fields>
+	</fieldset>
+	</fields>
+</form>
