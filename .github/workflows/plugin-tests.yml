@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: extension-builder/joomla
-          ref: e54c39eaf8803d614a522b651507fef0536f81c2
+          ref: eae8a18a91f781bccce915c8abe6d285a35cd235
           path: .runtime/jcb
           persist-credentials: false
 
