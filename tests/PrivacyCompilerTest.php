@@ -46,8 +46,28 @@ use VDM\Plugin\Extension\ComponentbuilderPrivacyCompiler\Extension\Componentbuil
 #[CoversNothing]
 final class PrivacyCompilerTest extends PluginTestCase
 {
+	/**
+	 * Target configuration read by the emitter.
+	 *
+	 * @var Config
+	 * @since 6.2.0
+	 */
 	private Config $config;
+
+	/**
+	 * Native services used by generated code.
+	 *
+	 * @var Container
+	 * @since 6.2.0
+	 */
 	private Container $joomlaContainer;
+
+	/**
+	 * Utility state restored after each test.
+	 *
+	 * @var array
+	 * @since 6.2.0
+	 */
 	private array $utilityState = [];
 
 	/**
@@ -75,11 +95,27 @@ final class PrivacyCompilerTest extends PluginTestCase
 		// Permissions are an external compiler boundary; retain the requested action.
 		$services->set('Compiler.Creator.Permission', new class
 		{
+			/**
+			 * Keep a view action unchanged at the permission boundary.
+			 *
+			 * @param string $view View name.
+			 * @param string $action Requested action.
+			 * @return string
+			 * @since 6.2.0
+			 */
 			public function getAction(string $view, string $action): string
 			{
 				return $action;
 			}
 
+			/**
+			 * Keep a global action unchanged at the permission boundary.
+			 *
+			 * @param string $view View name.
+			 * @param string $action Requested action.
+			 * @return string
+			 * @since 6.2.0
+			 */
 			public function getGlobal(string $view, string $action): string
 			{
 				return $action;
@@ -91,6 +127,12 @@ final class PrivacyCompilerTest extends PluginTestCase
 		$this->setJoomlaContainer($this->joomlaContainer);
 	}
 
+	/**
+	 * Restore the compiler utilities before restoring Joomla globals.
+	 *
+	 * @return void
+	 * @since 6.2.0
+	 */
 	protected function tearDown(): void
 	{
 		foreach ($this->utilityState as [$property, $value])
@@ -100,6 +142,12 @@ final class PrivacyCompilerTest extends PluginTestCase
 		parent::tearDown();
 	}
 
+	/**
+	 * Cover every compile target excluded from the native migration.
+	 *
+	 * @return iterable
+	 * @since 6.2.0
+	 */
 	public static function olderTargets(): iterable
 	{
 		yield 'Joomla 3' => [3];
@@ -161,13 +209,41 @@ final class PrivacyCompilerTest extends PluginTestCase
 		$this->joomlaContainer->set(DatabaseInterface::class, $database);
 		$table = new class
 		{
+			/**
+			 * Rows loaded before deletion.
+			 *
+			 * @var array
+			 * @since 6.2.0
+			 */
 			public array $loaded = [];
+
+			/**
+			 * Rows removed by the generated helper.
+			 *
+			 * @var array
+			 * @since 6.2.0
+			 */
 			public array $deleted = [];
+
+			/**
+			 * Record a successful load without database access.
+			 *
+			 * @param int $id Row identifier.
+			 * @return bool
+			 * @since 6.2.0
+			 */
 			public function load(int $id): bool
 			{
 				$this->loaded[] = $id;
 				return true;
 			}
+			/**
+			 * Record a successful deletion without changing stored data.
+			 *
+			 * @param int $id Row identifier.
+			 * @return bool
+			 * @since 6.2.0
+			 */
 			public function delete(int $id): bool
 			{
 				$this->deleted[] = $id;
@@ -176,15 +252,42 @@ final class PrivacyCompilerTest extends PluginTestCase
 		};
 		$class::$model = new class($table)
 		{
+			/**
+			 * IDs and user received from the generated export query.
+			 *
+			 * @var array
+			 * @since 6.2.0
+			 */
 			public array $exportCalls = [];
+
+			/**
+			 * Inject the table boundary used by removal.
+			 *
+			 * @param object $table Table boundary.
+			 * @since 6.2.0
+			 */
 			public function __construct(private object $table)
 			{
 			}
+			/**
+			 * Return a row containing both personal and excluded system fields.
+			 *
+			 * @param array $ids Queried row identifiers.
+			 * @param User $user User whose export is requested.
+			 * @return array
+			 * @since 6.2.0
+			 */
 			public function getPrivacyExport(array $ids, User $user): array
 			{
 				$this->exportCalls[] = [$ids, $user->id];
 				return [['id' => 7, 'title' => 'Personal entry', 'metadata' => (object) ['key' => 'value'], 'created_by' => 42]];
 			}
+			/**
+			 * Expose the table boundary used by generated removal code.
+			 *
+			 * @return object
+			 * @since 6.2.0
+			 */
 			public function getTable(): object
 			{
 				return $this->table;

@@ -63,3 +63,10 @@ installation requirements are documented separately.
 This review does not replace full compilation of the maintainer's complete JCB
 definition package. Regression tests exercise the actual plugin classes and
 their generated privacy helper output, rather than a copied implementation.
+
+The original `8fde47e` and migrated emitters were also executed independently
+for targets 3, 4 and 5, with debug comments enabled/disabled, tabs/four spaces,
+and default, alternate-user-field, custom-link and anonymization settings.
+All 48 complete outputs matched byte-for-byte (419,412 bytes), including the
+generated source-line comments. The native helper tests execute export and
+removal behavior using Joomla's actual privacy export objects.
