@@ -370,7 +370,7 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   PrivacyTableRequest  \$request  The request record being processed";
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   Joomla__"."_effdaf6d_2275_425d_9f52_d4952e564d34___Power                \$user     The user account associated with this request if available";
 		$methods .= PHP_EOL . Indent::_(1) . " *";
-		$methods .= PHP_EOL . Indent::_(1) . " * @return  PrivacyExportDomain[]";
+		$methods .= PHP_EOL . Indent::_(1) . " * @return  " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_f5e0753c_c8d9_4965_a606_9c45b37a6857___Power' : 'PrivacyExportDomain') . '[]';
 		$methods .= PHP_EOL . Indent::_(1) . " */";
 		$methods .= PHP_EOL . Indent::_(1) . "public static function onPrivacyExportRequest(&\$plugin, &\$domains, &\$request, &\$user)";
 		$methods .= PHP_EOL . Indent::_(1) . "{";
@@ -408,16 +408,16 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 			$methods .= PHP_EOL . Indent::_(1) . " *";
 			$methods .= PHP_EOL . Indent::_(1) . " * @param   Joomla__"."_11accf54_fcb9_4ba0_a645_7c80ce14e224___Power  \$user  The Joomla__"."_11accf54_fcb9_4ba0_a645_7c80ce14e224___Power object to process";
 			$methods .= PHP_EOL . Indent::_(1) . " *";
-			$methods .= PHP_EOL . Indent::_(1) . " * @return  PrivacyExportDomain";
+			$methods .= PHP_EOL . Indent::_(1) . " * @return  " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_f5e0753c_c8d9_4965_a606_9c45b37a6857___Power' : 'PrivacyExportDomain');
 			$methods .= PHP_EOL . Indent::_(1) . " */";
 			$methods .= PHP_EOL . Indent::_(1) . "protected static function create" . ucfirst($viewName_list) . "Domain(&\$plugin, &\$user)";
 			$methods .= PHP_EOL . Indent::_(1) . "{";
 			$methods .= PHP_EOL . Indent::_(2) . "//" . Line::_(__Line__, __Class__) . " create " . $view->name_list . " domain";
 			$methods .= PHP_EOL . Indent::_(2) . "\$domain = self::createDomain('" . $viewName_single . "', '" . Placefix::_("component") . "_" . $viewName_single . "_data');";
 			$methods .= PHP_EOL . Indent::_(2) . "//" . Line::_(__Line__, __Class__) . " get database object";
-			$methods .= PHP_EOL . Indent::_(2) . "\$db = Factory::getDbo();";
+			$methods .= PHP_EOL . Indent::_(2) . "\$db = " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_39403062_84fb_46e0_bac4_0023f766e827___Power::getContainer()->get(Joomla__' . '_7bd29d76_73c9_4c07_a5da_4f7a32aff78f___Power::class)' : 'Factory::getDbo()') . ';';
 			$methods .= PHP_EOL . Indent::_(2) . "//" . Line::_(__Line__, __Class__) . " get all item ids of " . $view->name_list . " that belong to this user";
-			$methods .= PHP_EOL . Indent::_(2) . "\$query = \$db->getQuery(true)";
+			$methods .= PHP_EOL . Indent::_(2) . "\$query = \$db->" . ($this->isJoomlaSixTarget() ? 'createQuery()' : 'getQuery(true)');
 			$methods .= PHP_EOL . Indent::_(3) . "->select('id')";
 			$methods .= PHP_EOL . Indent::_(3) . "->from(\$db->quoteName('#__" . Placefix::_('component') . '_' . $viewName_single . "'));";
 			// get via custom script
@@ -477,13 +477,13 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   string  \$name         The domain's name";
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   string  \$description  The domain's description";
 		$methods .= PHP_EOL . Indent::_(1) . " *";
-		$methods .= PHP_EOL . Indent::_(1) . " * @return  PrivacyExportDomain";
+		$methods .= PHP_EOL . Indent::_(1) . " * @return  " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_f5e0753c_c8d9_4965_a606_9c45b37a6857___Power' : 'PrivacyExportDomain');
 		$methods .= PHP_EOL . Indent::_(1) . " *";
 		$methods .= PHP_EOL . Indent::_(1) . " * @since   3.9.0";
 		$methods .= PHP_EOL . Indent::_(1) . " */";
 		$methods .= PHP_EOL . Indent::_(1) . "protected static function createDomain(\$name, \$description = '')";
 		$methods .= PHP_EOL . Indent::_(1) . "{";
-		$methods .= PHP_EOL . Indent::_(2) . "\$domain              = new PrivacyExportDomain;";
+		$methods .= PHP_EOL . Indent::_(2) . "\$domain              = new " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_f5e0753c_c8d9_4965_a606_9c45b37a6857___Power' : 'PrivacyExportDomain') . ';';
 		$methods .= PHP_EOL . Indent::_(2) . "\$domain->name        = \$name;";
 		$methods .= PHP_EOL . Indent::_(2) . "\$domain->description = \$description;";
 
@@ -496,13 +496,13 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   array         \$data    The array data to convert";
 		$methods .= PHP_EOL . Indent::_(1) . " * @param   integer|null  \$itemId  The ID of this item";
 		$methods .= PHP_EOL . Indent::_(1) . " *";
-		$methods .= PHP_EOL . Indent::_(1) . " * @return  PrivacyExportItem";
+		$methods .= PHP_EOL . Indent::_(1) . " * @return  " . ($this->isJoomlaSixTarget() ? '\\Joomla\\Component\\Privacy\\Administrator\\Export\\Item' : 'PrivacyExportItem');
 		$methods .= PHP_EOL . Indent::_(1) . " *";
 		$methods .= PHP_EOL . Indent::_(1) . " * @since   3.9.0";
 		$methods .= PHP_EOL . Indent::_(1) . " */";
 		$methods .= PHP_EOL . Indent::_(1) . "protected static function createItemFromArray(array \$data, \$itemId = null)";
 		$methods .= PHP_EOL . Indent::_(1) . "{";
-		$methods .= PHP_EOL . Indent::_(2) . "\$item = new PrivacyExportItem;";
+		$methods .= PHP_EOL . Indent::_(2) . "\$item = new " . ($this->isJoomlaSixTarget() ? '\\Joomla\\Component\\Privacy\\Administrator\\Export\\Item' : 'PrivacyExportItem') . ';';
 		$methods .= PHP_EOL . Indent::_(2) . "\$item->id = \$itemId;";
 
 		$methods .= PHP_EOL . PHP_EOL . Indent::_(2) . "foreach (\$data as \$key => \$value)";
@@ -517,7 +517,7 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 		$methods .= PHP_EOL . Indent::_(4) . "\$value = print_r(\$value, true);";
 		$methods .= PHP_EOL . Indent::_(3) . "}";
 
-		$methods .= PHP_EOL . PHP_EOL . Indent::_(3) . "\$field        = new PrivacyExportField;";
+		$methods .= PHP_EOL . PHP_EOL . Indent::_(3) . "\$field        = new " . ($this->isJoomlaSixTarget() ? '\\Joomla\\Component\\Privacy\\Administrator\\Export\\Field' : 'PrivacyExportField') . ';';
 		$methods .= PHP_EOL . Indent::_(3) . "\$field->name  = \$key;";
 		$methods .= PHP_EOL . Indent::_(3) . "\$field->value = \$value;";
 
@@ -656,9 +656,9 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 
 			$methods .= PHP_EOL . Indent::_(1) . "{";
 			$methods .= PHP_EOL . Indent::_(2) . "//" . Line::_(__Line__, __Class__) . " get database object";
-			$methods .= PHP_EOL . Indent::_(2) . "\$db = Factory::getDbo();";
+			$methods .= PHP_EOL . Indent::_(2) . "\$db = " . ($this->isJoomlaSixTarget() ? 'Joomla__' . '_39403062_84fb_46e0_bac4_0023f766e827___Power::getContainer()->get(Joomla__' . '_7bd29d76_73c9_4c07_a5da_4f7a32aff78f___Power::class)' : 'Factory::getDbo()') . ';';
 			$methods .= PHP_EOL . Indent::_(2) . "//" . Line::_(__Line__, __Class__) . " get all item ids of " . $view->name_list . " that belong to this user";
-			$methods .= PHP_EOL . Indent::_(2) . "\$query = \$db->getQuery(true)";
+			$methods .= PHP_EOL . Indent::_(2) . "\$query = \$db->" . ($this->isJoomlaSixTarget() ? 'createQuery()' : 'getQuery(true)');
 			$methods .= PHP_EOL . Indent::_(3) . "->select('id')";
 			$methods .= PHP_EOL . Indent::_(3) . "->from(\$db->quoteName('#__" . Placefix::_('component') . '_' . $viewName_single . "'));";
 			// get via custom script
@@ -844,4 +844,17 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 			'jcb_ce_onBeforeSetLangFileData' => 'jcb_ce_onBeforeSetLangFileData'
 		];
 	}
+
+	/**
+	 * Select native APIs for the generated Joomla 6 target only.
+	 *
+	 * @return  bool
+	 *
+	 * @since   6.2.0
+	 */
+	protected function isJoomlaSixTarget(): bool
+	{
+		return (int) CompilerFactory::_('Config')->get('joomla_version', 3) === 6;
+	}
+
 }

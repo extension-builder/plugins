@@ -10,6 +10,8 @@
  */
 namespace VDM\Plugin\Content\ComponentbuilderCustomAdminHeadersTabs\Extension;
 
+use Joomla\CMS\Event\Model\PrepareFormEvent;
+use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Component\ComponentHelper;
@@ -24,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderCustomAdminHeadersTabs
  * @since     4.0.0
  */
-final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
+final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin implements SubscriberInterface
 {
 
 	/**
@@ -36,17 +38,30 @@ final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
 	protected  $autoloadLanguage = true;
 
 	/**
+	 * Get the native Joomla event subscriptions.
+	 *
+	 * @return  array
+	 * @since   6.0.1
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		return [
+			'onContentPrepareForm' => 'onContentPrepareForm',
+		];
+	}
+
+	/**
 	 * Runs on content preparation of form.
 	 *
-	 * @param   Form     $form  The form
-	 * @param   \stdClass  $data  The data
+	 * @param   PrepareFormEvent  $event  The form preparation event.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function onContentPrepareForm(Form $form, $data)
+	public function onContentPrepareForm(PrepareFormEvent $event): void
 	{
+		$form = $event->getForm();
 		$context = $form->getName();
 
 		// When this is componentbuilder custom_admin_view
@@ -70,6 +85,5 @@ final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
 				}
 			}
 		}
-		return true;
 	}
 }
