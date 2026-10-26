@@ -19,7 +19,6 @@ use Joomla\CMS\Language\Language;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\Dispatcher;
 use ReflectionProperty;
-use VDM\Tests\Support\FilesystemTestCase;
 
 
 /**
@@ -27,7 +26,7 @@ use VDM\Tests\Support\FilesystemTestCase;
  *
  * @since 6.2.0
  */
-abstract class PluginTestCase extends FilesystemTestCase
+abstract class PluginTestCase extends CompiledPluginTestCase
 {
 	/**
 	 * Static state restored after every plugin test.
@@ -80,6 +79,7 @@ abstract class PluginTestCase extends FilesystemTestCase
 		$this->application->method('getLanguage')->willReturn(new Language('en-GB'));
 		$this->application->method('getDispatcher')->willReturn($this->dispatcher);
 		$this->setJoomlaApplication($this->application);
+		$this->setJoomlaFactoryProperty('language', $this->application->getLanguage());
 	}
 
 	/**

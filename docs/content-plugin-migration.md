@@ -5,8 +5,10 @@ records** before compiling the component with the native Joomla 6 compiler.
 These source files are the migration reference; changing an installed plugin
 file alone does not update the `main_class_code` stored in JCB.
 
-All nine content plugins now implement Joomla's `SubscriberInterface`, explicitly
-subscribe to `onContentPrepareForm`, and receive a `PrepareFormEvent`. The handler
+All nine authored content handlers now receive a `PrepareFormEvent`. JCB's Joomla
+6 compiler generates `SubscriberInterface` and the default subscription map; do
+not add either to the maintained plugin body or manually alter the class declaration.
+The handler
 gets the existing form with `$event->getForm()` and performs the same form and
 editor modifications. `PrepareFormEvent` has no result collection: the previous
 `return true` is removed, not replaced by `addResult(true)`.
@@ -25,15 +27,18 @@ editor modifications. `PrepareFormEvent` has no result collection: the previous
 
 For each row the changed class is
 `plg_content_<plugin>/src/Extension/<class>.php`. Copy both the changed methods and
-the required event/interface references into JCB's existing plugin definition
+the required event references into JCB's existing plugin definition
 fields. These files are generated PHP with resolved class imports. When updating
 JCB definitions, retain the project's normal Joomla Power references and import
 resolution; do not replace that pipeline or invent Power identifiers.
+The [field-by-field guide](plugin-definition-fields.md) identifies the exact
+header and body changes, including the compiler-owned areas to leave alone.
 
 ## Privacy Tabs also migrates save and cache handling
 
-`ComponentbuilderPrivacyTabs` explicitly subscribes to `onContentBeforeSave` and
-receives `BeforeSaveEvent`. It gets the context and mutable item from that event
+`ComponentbuilderPrivacyTabs::onContentBeforeSave()` receives `BeforeSaveEvent`.
+JCB generates its subscription alongside `onContentPrepareForm`. The method
+gets the context and mutable item from that event
 and retains the existing parameter persistence and cache clearing behavior. The
 handler previously returned no result; it still contributes no success/failure
 result and modifies the same item object.
@@ -57,9 +62,10 @@ Joomla 4 plugin record would break dispatch.
 
 The event APIs used here already exist in Joomla 5.0; this handler migration does
 not itself require separate Joomla 5 and Joomla 6 method bodies. Joomla's 5.0
-`FormBehaviorTrait` dispatches `PrepareFormEvent` directly. However, these plugin
-packages are the Joomla 6 distribution, and their installer minimum remains
-Joomla 6.0. Retain the existing Joomla 5 distribution/definitions unless a
+`FormBehaviorTrait` dispatches `PrepareFormEvent` directly. The JCB-generated
+Joomla 6 distribution receives a Joomla 6 minimum from the compiler. This branch's
+unchanged reference installer files are not the generated Joomla 6 packages.
+Retain the existing Joomla 5 distribution/definitions unless a
 separate Joomla 5 build is intentionally maintained and tested. This change does
 not assert that every other dependency of the complete plugins supports every
 Joomla 5 minor version.

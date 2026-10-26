@@ -23,9 +23,5 @@ if (!defined('JVERSION'))
 	define('JVERSION', (new Joomla\CMS\Version())->getShortVersion());
 }
 
-foreach (glob(JCB_PLUGINS_ROOT . '/plg_*/src/Extension/*.php') as $pluginFile)
-{
-	require_once $pluginFile;
-}
-
+require_once __DIR__ . '/CompiledPluginTestCase.php';
 require_once __DIR__ . '/PluginTestCase.php';
