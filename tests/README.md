@@ -23,7 +23,7 @@ prerequisite snippet. No generic preflight/postflight additions are supplied.
 
 The compiler, test support and Composer dependencies come from one reviewed JCB
 checkout. This avoids maintaining a second copy of its dependency graph. CI
-pins JCB at `eae8a18a91f781bccce915c8abe6d285a35cd235`, Joomla CMS at the 6.1.2
+pins JCB at `fde580d0b68f21987358407a123cd5d119fccdfa`, Joomla CMS at the 6.1.2
 source revision, and installs JCB's committed Composer lock. The plugin code
 under test always comes from the current checkout. Network access occurs only
 during setup, never during a test.
@@ -32,7 +32,7 @@ With PHP 8.3 or 8.4 and Composer 2 installed, prepare the runtime once:
 
 ```bash
 git clone --no-checkout https://github.com/extension-builder/joomla.git .runtime/jcb
-git -C .runtime/jcb checkout eae8a18a91f781bccce915c8abe6d285a35cd235
+git -C .runtime/jcb checkout fde580d0b68f21987358407a123cd5d119fccdfa
 git clone --branch 6.1.2 --depth 1 https://github.com/joomla/joomla-cms.git \
   .runtime/jcb/libraries/vendor_jcb/tests/.runtime/joomla-cms
 composer --working-dir=.runtime/jcb/libraries/vendor_jcb/tests install
