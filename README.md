@@ -1,0 +1,2 @@
+# plugins
+All component plugins
