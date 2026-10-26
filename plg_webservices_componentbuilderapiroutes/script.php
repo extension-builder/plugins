@@ -15,6 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Version;
 use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Installer\InstallerScriptInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
@@ -24,7 +25,7 @@ use Joomla\Filesystem\Folder;
  *
  * @package ComponentbuilderApiRoutes
  */
-class plgWebservicesComponentbuilderApiRoutesInstallerScript
+class plgWebservicesComponentbuilderApiRoutesInstallerScript implements InstallerScriptInterface
 {
 	/**
 	 * The CMS Application.
@@ -51,10 +52,8 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 
 	/**
 	 * Constructor
-	 *
-	 * @param   InstallerAdapter  $adapter  The object responsible for running this script
 	 */
-	public function __construct($adapter)
+	public function __construct()
 	{
 		// get application
 		$this->app = Factory::getApplication();
@@ -66,6 +65,45 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 	}
 
 	/**
+	 * Called on install.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  bool  True on success.
+	 * @since   6.0.0
+	 */
+	public function install(InstallerAdapter $adapter): bool
+	{
+		return true;
+	}
+
+	/**
+	 * Called on update.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  bool  True on success.
+	 * @since   6.0.0
+	 */
+	public function update(InstallerAdapter $adapter): bool
+	{
+		return true;
+	}
+
+	/**
+	 * Called on uninstall.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  bool  True on success.
+	 * @since   6.0.0
+	 */
+	public function uninstall(InstallerAdapter $adapter): bool
+	{
+		return true;
+	}
+
+	/**
 	 * Called before any type of action
 	 *
 	 * @param   string  $route  Which action is happening (install|uninstall|discover_install|update)
@@ -73,16 +111,16 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function preflight($route, $adapter)
+	public function preflight(string $route, InstallerAdapter $adapter): bool
 	{
-		// set application to local method var, just use $this->app in future [we will drop $app in J6]
+		// Use the installer application.
 		$app = $this->app;
 
 		// the default for both install and update
 		$jversion = new Version();
-		if (!$jversion->isCompatible('5.0.0'))
+		if (!$jversion->isCompatible('6.0.0'))
 		{
-			$app->enqueueMessage('Please upgrade to at least Joomla! 5.0.0 before continuing!', 'error');
+			$app->enqueueMessage('Please upgrade to at least Joomla! 6.0.0 before continuing!', 'error');
 			return false;
 		}
 
@@ -100,9 +138,9 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function postflight($route, $adapter)
+	public function postflight(string $route, InstallerAdapter $adapter): bool
 	{
-		// set application to local method var, just use $this->app in future [we will drop $app in J6]
+		// Use the installer application.
 		$app = $this->app;
 
 		return true;
@@ -114,7 +152,7 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 	 * @return  void
 	 * @since   5.0.2
 	 */
-	protected function removeFiles()
+	protected function removeFiles(): void
 	{
 		if (!empty($this->deleteFiles))
 		{
@@ -139,3 +177,5 @@ class plgWebservicesComponentbuilderApiRoutesInstallerScript
 		}
 	}
 }
+
+return new plgWebservicesComponentbuilderApiRoutesInstallerScript();

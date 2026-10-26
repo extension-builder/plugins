@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
+	bootstrap="tests/bootstrap.php"
+	cacheDirectory=".phpunit.cache"
+	colors="true"
+	executionOrder="random"
+	failOnDeprecation="true"
+	failOnNotice="true"
+	failOnWarning="true"
+	failOnRisky="true"
+	failOnEmptyTestSuite="true"
+	failOnPhpunitDeprecation="true"
+	failOnPhpunitNotice="true"
+	beStrictAboutOutputDuringTests="true"
+>
+	<testsuites>
+		<testsuite name="JCB plugins">
+			<directory suffix="Test.php">tests</directory>
+		</testsuite>
+	</testsuites>
+	<source ignoreSuppressionOfDeprecations="true" ignoreSuppressionOfPhpDeprecations="true">
+		<include>
+			<directory suffix=".php">.</directory>
+		</include>
+		<exclude>
+			<directory>tests</directory>
+			<directory>.runtime</directory>
+		</exclude>
+	</source>
+</phpunit>

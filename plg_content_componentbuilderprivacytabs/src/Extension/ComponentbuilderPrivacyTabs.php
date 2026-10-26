@@ -10,8 +10,11 @@
  */
 namespace VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Extension;
 
+use Joomla\CMS\Event\Model\PrepareFormEvent;
+use Joomla\CMS\Event\Model\BeforeSaveEvent;
+use Joomla\CMS\Event\Model\AfterCleanCacheEvent;
+use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Form\Form;
@@ -21,7 +24,7 @@ use VDM\Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Table\Extension;
 use Joomla\Database\DatabaseInterface;
 use Joomla\CMS\Cache\Controller\CallbackController;
-use Joomla\CMS\Cache\Cache;
+use Joomla\CMS\Cache\CacheControllerFactoryInterface;
 use Joomla\CMS\Cache\Exception\CacheExceptionInterface;
 
 // No direct access to this file
@@ -33,7 +36,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderPrivacyTabs
  * @since     3.0.0
  */
-final class ComponentbuilderPrivacyTabs extends CMSPlugin
+final class ComponentbuilderPrivacyTabs extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
@@ -44,17 +47,31 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 	protected  $autoloadLanguage = true;
 
 	/**
+	 * Get the native Joomla event subscriptions.
+	 *
+	 * @return  array
+	 * @since   6.0.1
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		return [
+			'onContentPrepareForm' => 'onContentPrepareForm',
+			'onContentBeforeSave' => 'onContentBeforeSave',
+		];
+	}
+
+	/**
 	 * Runs on content preparation of form.
 	 *
-	 * @param   Form     $form  The form
-	 * @param   stdClass  $data  The data
+	 * @param   PrepareFormEvent  $event  The form preparation event.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function onContentPrepareForm(Form $form, $data)
+	public function onContentPrepareForm(PrepareFormEvent $event): void
 	{
+		$form = $event->getForm();
 		$context = $form->getName();
 
 		// When this is componentbuilder admin view
@@ -78,23 +95,21 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 			// set the field editor value (with none as fallback)
 			$form->setFieldAttribute('custom_link', 'editor', $global_editor . '|none', 'params.privacy');
 		}
-		return true;
 	}
 
 	/**
-	 * This is an event that is called right before the content
-	 * is saved into the database.
+	 * Update the privacy plugin setting before saving an administrator view.
 	 *
-	 * @param   string  $context  The context of the content passed to the plugin (added in 1.6).
-	 * @param   object  $article  A JTableContent object.
-	 * @param   bool    $isNew    If the content is just about to be created.
+	 * @param   BeforeSaveEvent  $event  The content save event.
 	 *
-	 * @return  void.
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function onContentBeforeSave($context, $item, $isNew, $data = array())
+	public function onContentBeforeSave(BeforeSaveEvent $event): void
 	{
+		$context = $event->getContext();
+		$item = $event->getItem();
 		// When this is componentbuilder admin view
 		if ('com_componentbuilder.admin_view' === $context)
 		{
@@ -115,7 +130,7 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 				$extensionTable = new  Extension(Factory::getContainer()->get(DatabaseInterface::class));
 				$extensionTable->load(array('element' => 'componentbuilderprivacytabs'));
 				// Save the change
-				$extensionTable->set('params', $this->params->toString());
+				$extensionTable->params = $this->params->toString();
 				$extensionTable->save((array) $extensionTable);
 				// and remove the value from the params
 				unset($item->params['plugin']);
@@ -146,18 +161,19 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 	 */
 	protected function cleanCache($group = null, $client_id = 0)
 	{
-		$conf = Factory::getConfig();
+		$app = $this->getApplication();
 
 		$options = [
-			'defaultgroup' => $group ?: (isset($this->option) ? $this->option : Factory::getApplication()->getInput()->get('option')),
-			'cachebase' => $client_id ? JPATH_ADMINISTRATOR . '/cache' : $conf->get('cache_path', JPATH_SITE . '/cache'),
+			'defaultgroup' => $group ?: (isset($this->option) ? $this->option : $app->getInput()->get('option')),
+			'cachebase' => $client_id ? JPATH_ADMINISTRATOR . '/cache' : $app->get('cache_path', JPATH_SITE . '/cache'),
 			'result' => true,
 		];
 
 		try
 		{
 			/** @var CallbackController $cache */
-			$cache = Cache::getInstance('callback', $options);
+			$cache = Factory::getContainer()->get(CacheControllerFactoryInterface::class)
+				->createCacheController('callback', $options);
 			$cache->clean();
 		}
 		catch (CacheExceptionInterface $exception)
@@ -166,6 +182,9 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 		}
 
 		// Trigger the onContentCleanCache event.
-		Factory::getApplication()->triggerEvent('onContentCleanCache', $options);
+		$app->getDispatcher()->dispatch(
+			'onContentCleanCache',
+			new AfterCleanCacheEvent('onContentCleanCache', $options)
+		);
 	}
 }
