@@ -10,8 +10,8 @@
  */
 namespace VDM\Plugin\Webservices\ComponentbuilderApiRoutes\Extension;
 
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\Event\SubscriberInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -22,20 +22,9 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderApiRoutes
  * @since     1.0.0
  */
-final class ComponentbuilderApiRoutes extends CMSPlugin implements SubscriberInterface
+final class ComponentbuilderApiRoutes extends CMSPlugin
 {
-	/**
-	 * Return the native event subscriptions.
-	 *
-	 * @return  array
-	 * @since   6.0.0
-	 */
-	public static function getSubscribedEvents(): array
-	{
-		return ['onBeforeApiRoute' => 'onBeforeApiRoute'];
-	}
-
-	/**
+/**
 	 * Register the JSON:API routes of com_componentbuilder.
 	 *
 	 * @param   \Joomla\CMS\Event\Application\BeforeApiRouteEvent  $event  The event.

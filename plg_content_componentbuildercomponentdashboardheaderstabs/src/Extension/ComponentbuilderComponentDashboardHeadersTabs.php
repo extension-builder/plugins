@@ -11,7 +11,6 @@
 namespace VDM\Plugin\Content\ComponentbuilderComponentDashboardHeadersTabs\Extension;
 
 use Joomla\CMS\Event\Model\PrepareFormEvent;
-use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Component\ComponentHelper;
@@ -26,7 +25,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderComponentDashboardHeadersTabs
  * @since     4.0.0
  */
-final class ComponentbuilderComponentDashboardHeadersTabs extends CMSPlugin implements SubscriberInterface
+final class ComponentbuilderComponentDashboardHeadersTabs extends CMSPlugin
 {
 
 	/**
@@ -36,19 +35,6 @@ final class ComponentbuilderComponentDashboardHeadersTabs extends CMSPlugin impl
 	 * @since  1.0
 	 */
 	protected  $autoloadLanguage = true;
-
-	/**
-	 * Get the native Joomla event subscriptions.
-	 *
-	 * @return  array
-	 * @since   6.0.1
-	 */
-	public static function getSubscribedEvents(): array
-	{
-		return [
-			'onContentPrepareForm' => 'onContentPrepareForm',
-		];
-	}
 
 	/**
 	 * Runs on content preparation of form.

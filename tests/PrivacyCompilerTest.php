@@ -35,7 +35,6 @@ use VDM\Joomla\Componentbuilder\Compiler\Utilities\Line;
 use VDM\Joomla\Componentbuilder\Compiler\Utilities\Placefix;
 use VDM\Joomla\Utilities\ArrayHelper;
 use VDM\Joomla\Utilities\StringHelper;
-use VDM\Plugin\Extension\ComponentbuilderPrivacyCompiler\Extension\ComponentbuilderPrivacyCompiler;
 
 
 /**
@@ -329,7 +328,8 @@ final class PrivacyCompilerTest extends PluginTestCase
 	 */
 	private function generateHelpers(): string
 	{
-		$plugin = (new ReflectionClass(ComponentbuilderPrivacyCompiler::class))->newInstanceWithoutConstructor();
+		$class = $this->compiledPlugin('ComponentbuilderPrivacyCompiler')['class'];
+		$plugin = (new ReflectionClass($class))->newInstanceWithoutConstructor();
 		(new ReflectionProperty($plugin, 'activeViews'))->setValue($plugin, [(object) [
 			'id' => 1,
 			'name_single' => 'Entry',

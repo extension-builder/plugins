@@ -24,7 +24,6 @@ use Joomla\Registry\Registry;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use ReflectionMethod;
 use ReflectionProperty;
-use VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Extension\ComponentbuilderPrivacyTabs;
 
 
 /**
@@ -94,7 +93,8 @@ final class PrivacyTabsTest extends PluginTestCase
 		{
 			$events[] = [$event->getDefaultGroup(), $event->getCacheBase(), $event->getResult()];
 		});
-		$plugin = new ComponentbuilderPrivacyTabs(['params' => new Registry(['plugin' => 0, 'keep' => true])]);
+		$class = $this->compiledPlugin('ComponentbuilderPrivacyTabs')['class'];
+		$plugin = new $class(['params' => new Registry(['plugin' => 0, 'keep' => true])]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
 		$item = (object) ['params' => '{"plugin":73,"privacy":{"activate":1},"other":"retained"}'];
@@ -138,7 +138,8 @@ final class PrivacyTabsTest extends PluginTestCase
 		{
 			$events[] = [$event->getDefaultGroup(), $event->getCacheBase(), $event->getResult()];
 		});
-		$plugin = new ComponentbuilderPrivacyTabs(['params' => new Registry()]);
+		$class = $this->compiledPlugin('ComponentbuilderPrivacyTabs')['class'];
+		$plugin = new $class(['params' => new Registry()]);
 		$plugin->setApplication($this->application);
 		(new ReflectionMethod($plugin, 'cleanCache'))->invoke($plugin, 'com_plugins', 1);
 		$this->assertSame([['com_plugins', JPATH_ADMINISTRATOR . '/cache', false]], $events);

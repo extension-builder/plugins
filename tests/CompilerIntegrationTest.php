@@ -19,20 +19,11 @@ use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Language;
-use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Dispatcher;
-use Joomla\Event\SubscriberInterface;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
-use VDM\Joomla\Componentbuilder\Compiler\Architecture\JoomlaSix\Plugin\Extension;
-use VDM\Joomla\Componentbuilder\Compiler\Interfaces\PowerInterface;
-use VDM\Joomla\Componentbuilder\Compiler\JoomlaPower\Extractor;
-use VDM\Joomla\Componentbuilder\Compiler\JoomlaPower\Injector;
-use VDM\Joomla\Componentbuilder\Compiler\Placeholder;
-use VDM\Joomla\Componentbuilder\Power\Parser;
-use VDM\Joomla\Tests\Componentbuilder\Compiler\Architecture\ArchitectureTestCase;
 
 
 /**
@@ -41,7 +32,7 @@ use VDM\Joomla\Tests\Componentbuilder\Compiler\Architecture\ArchitectureTestCase
  * @since 6.2.0
  */
 #[CoversNothing]
-final class CompilerIntegrationTest extends ArchitectureTestCase
+final class CompilerIntegrationTest extends PluginTestCase
 {
 	/**
 	 * Use every supplied plugin source as a compiler input, without remote reads.
@@ -68,7 +59,7 @@ final class CompilerIntegrationTest extends ArchitectureTestCase
 	#[DataProvider('plugins')]
 	public function testPluginDefinitionCompilesWithoutLegacyListenerAdapters(string $file): void
 	{
-		$this->compilePlugin($file);
+		$this->compiledPlugin($file);
 	}
 
 	/**
@@ -102,7 +93,7 @@ final class CompilerIntegrationTest extends ArchitectureTestCase
 	#[DataProvider('contentPlugins')]
 	public function testCompiledContentPluginsExecuteNativeHandlers(string $file, string $formFile): void
 	{
-		$class = $this->compilePlugin($file);
+		$class = $this->compiledPlugin($file)['class'];
 		$components = new ReflectionProperty(ComponentHelper::class, 'components');
 		$paths = new ReflectionProperty(FormHelper::class, 'paths');
 		$previousComponents = $components->getValue();
@@ -169,51 +160,4 @@ final class CompilerIntegrationTest extends ArchitectureTestCase
 		}
 	}
 
-	/**
-	 * Render supplied PHP through the real extension and Joomla Power pipeline.
-	 *
-	 * The generated tree is a focused source fixture, not a maintained database export.
-	 *
-	 * @param string $file Supplied plugin source.
-	 * @return class-string Loaded generated plugin class.
-	 * @since 6.2.0
-	 */
-	private function compilePlugin(string $file): string
-	{
-		$source = file_get_contents($file);
-		$parser = new Parser();
-		$this->assertSame(1, preg_match('/namespace\s+([^;]+);/', $source, $match));
-		$originalClass = $match[1] . '\\' . basename($file, '.php');
-		$plugin = (object) [
-			'comment' => '/** Maintained JCB plugin definition. */',
-			'class_name' => basename($file, '.php'),
-			'extends' => '\\Joomla\\CMS\\Plugin\\CMSPlugin',
-			'header' => implode(PHP_EOL, $parser->getUseStatements($source)),
-			'main_class_code' => $parser->getClassCode($source),
-		];
-		$original = clone $plugin;
-		$power = $this->createStub(PowerInterface::class);
-		$power->method('get')->willReturnMap([
-			['c06c5116-6b9d-487c-9b09-5094ec4506a3', 0, (object) ['_namespace' => 'Joomla\\Event', 'class_name' => 'SubscriberInterface', 'type' => 'interface']],
-		]);
-		$code = $this->renderer(Extension::class, ['power' => $power])->get($plugin);
-		$this->assertStringContainsString($plugin->main_class_code, $code);
-		$this->assertEquals($original, $plugin);
-		$namespace = __NAMESPACE__ . '\\Compiled\\Run' . bin2hex(random_bytes(8));
-		$injector = new Injector($power, new Extractor($this->createStub(DatabaseInterface::class), 6), $parser, $this->renderer(Placeholder::class));
-		$code = $injector->power('<?php' . PHP_EOL . 'namespace ' . $namespace . ';' . PHP_EOL . $plugin->header . PHP_EOL . $code);
-		$this->assertStringNotContainsString('Joomla___c06c5116_6b9d_487c_9b09_5094ec4506a3___Power', $code);
-		$folder = basename(dirname($file, 3));
-		$generatedFile = $this->writeTemporaryFile($folder . '/src/Extension/' . $plugin->class_name . '.php', $code);
-		foreach (glob(dirname($file, 3) . '/forms/*.xml') as $form)
-		{
-			$this->writeTemporaryFile($folder . '/forms/' . basename($form), file_get_contents($form));
-		}
-		require $generatedFile;
-		$class = $namespace . '\\' . $plugin->class_name;
-		$this->assertTrue(is_subclass_of($class, SubscriberInterface::class));
-		$this->assertSame($originalClass::getSubscribedEvents(), $class::getSubscribedEvents());
-
-		return $class;
-	}
 }

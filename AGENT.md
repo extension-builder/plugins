@@ -17,9 +17,9 @@ repairing two regressions: existing plugin definitions were rejected without a
 completed migration, and moving authored footer JavaScript to the document head
 changed its execution timing. Follow the paired changes:
 
-- [Plugins PR #1](https://github.com/extension-builder/plugins/pull/1): native plugin
-  handlers, providers and installers; target-aware privacy output; actual-plugin
-  regression tests; instructions for transferring changes into JCB definitions.
+- [Plugins PR #1](https://github.com/extension-builder/plugins/pull/1): authored
+  native handlers and imports; target-aware privacy emitters; tests of generated
+  packages; exact field instructions for transferring changes into JCB definitions.
 - [Compiler PR #61](https://github.com/extension-builder/joomla/pull/61): compiler
   fixes and regression coverage, including JavaScript loading and diagnostics.
 
@@ -31,7 +31,10 @@ Do not equate an open PR or passing focused test with a completed release.
 
 ## Files and source ownership
 
-Each `plg_<group>_<name>` folder is a deployable generated plugin tree:
+Each `plg_<group>_<name>` folder is a generated reference tree. During this
+migration only authored regions are updated. Regenerate installable packages with
+JCB; these reference trees retain the original infrastructure and are not completed
+Joomla 6 distributions:
 
 | Path within a plugin | Responsibility |
 | --- | --- |
@@ -51,6 +54,14 @@ JCB fields, and regenerate providers/installers through the corresponding
 compiler target. Never paste an entire generated file, provider or installer into
 `main_class_code`.
 
+Use [the exact field guide](docs/plugin-definition-fields.md). Do not edit generated
+class declarations, provider files, installer wrappers or API expansions by hand.
+Do not add common initialization, compatibility checks, lifecycle signatures or
+success-return boilerplate to preflight/postflight fields. Preserve existing custom
+actions; improve the J6 compiler when the surrounding generated structure is wrong.
+Property/method selections insert code into the body editor, so updating a catalogue
+entry does not migrate previously stored bodies automatically.
+
 The API Routes definition uses `[[[API_ROUTES_METHOD]]]`. Preserve that placeholder;
 the compiler generates its version-specific handler and Joomla 6 subscriptions.
 Do not copy the expanded route table or an extra subscription map back into the
@@ -67,8 +78,8 @@ failure. Compiler templates live in the core repository's established
 
 ### Content plugins: authoring forms
 
-Every plugin below lives in `plg_content_<name>`. Each implements
-`SubscriberInterface` and maps `onContentPrepareForm` to a handler accepting
+Every plugin below lives in `plg_content_<name>`. JCB generates
+`SubscriberInterface` and maps `onContentPrepareForm` to its authored handler accepting
 `Joomla\CMS\Event\Model\PrepareFormEvent`. The handler obtains the existing form
 from `$event->getForm()` and modifies that form. This event has no result list:
 use neither a legacy `return true` nor an invented `addResult(true)`.
@@ -90,7 +101,7 @@ unrelated components. The header plugins read
 `ComponentHelper::getParams('com_componentbuilder')->get('editor', 'none')`; their
 editor fallback remains `|none`.
 
-Privacy Tabs additionally subscribes to `onContentBeforeSave` using
+JCB additionally subscribes Privacy Tabs' authored `onContentBeforeSave` handler using
 `BeforeSaveEvent`. It reads the event's context and mutable item, normalizes the
 item's JSON parameters, saves a selected global privacy plugin in the extension
 table, removes that selection from the view parameters, and restores the JSON
@@ -133,11 +144,11 @@ plugin; they are not standalone Joomla dispatcher listeners.
 | Folder | Event and behavior | Dependencies and boundaries |
 | --- | --- | --- |
 | `plg_console_componentbuildercommands` | Subscribes to `ApplicationEvents::BEFORE_EXECUTE` with `registerCommands(Event $event)`. Registers `componentbuilder:compile:component` and the `init`, `get`, `reset`, `pull`, `push` package commands for entities from `Componentbuilder\Factory::getSuperpowers()`. | Uses the console application's available public container or Joomla's container, `WritableLoaderInterface`, shared command services, and JCB's existing command classes. Do not hardcode a second entity catalogue or execute commands during registration. |
-| `plg_webservices_componentbuilderapiroutes` | Subscribes to `onBeforeApiRoute` with `BeforeApiRouteEvent`. Registers the existing `v1/componentbuilder/...` JSON:API routes, including numeric-ID and GUID variants where declared. | Gets the router from the event. Routes use `com_componentbuilder`; GET defaults have `public => false`. Preserve methods, paths, controller actions, parameter constraints and authentication defaults. The source route table is authoritative. |
+| `plg_webservices_componentbuilderapiroutes` | JCB generates `onBeforeApiRoute` with `BeforeApiRouteEvent` from `[[[API_ROUTES_METHOD]]]`. It registers the linked component's JSON:API routes, including numeric-ID and GUID variants where configured. | Gets the router from the event. Preserve methods, paths, controller actions, parameter constraints and authentication defaults. The linked component's API configuration is authoritative; the checked-in expanded route table is reference output. |
 
 ## Host Joomla and generated target are different
 
-- **Host:** the Joomla instance running these plugins. These native package
+- **Host:** the Joomla instance running the regenerated plugins. Their native package
   providers construct `CMSPlugin` with its configuration array only and inject
   the application. Joomla performs subscriber registration. Installers implement
   `InstallerScriptInterface`, return the script instance, and require Joomla 6.
@@ -149,7 +160,8 @@ plugin; they are not standalone Joomla dispatcher listeners.
   a migration is explicitly limited to target 6. In core, event service selection
   follows host `Version::MAJOR_VERSION`; do not confuse it with target selection.
 
-All 18 package folders in this migration are Joomla 6 distributions. Preserve
+The checked-in folders retain the original generated infrastructure; only packages
+regenerated with the J6 compiler are Joomla 6 distributions. Preserve
 separate generated Joomla 4/5 packages and their providers/installers. All nine
 content plugins need separate Joomla 4 handler definitions because the concrete
 model event classes start in Joomla 5.0. Those event APIs alone do not require
@@ -198,7 +210,9 @@ prepared `libraries/vendor_jcb/tests` directory. PHPUnit configuration is
 and 8.4. Setup may download pinned dependencies; individual tests must not call
 remote services or mutate an installed Joomla site.
 
-The tests exercise real plugin source and forms, not copied replacement
+The tests compile authored source and generate infrastructure in temporary trees
+before loading the resulting classes and forms, rather than loading the checked-in
+reference scaffolding. They exercise real plugin source, not copied replacement
 implementations. `ContentPluginsTest` covers form changes and editor settings;
 `PrivacyTabsTest` covers item/global settings and cache success/failure events;
 `CompilerIntegrationTest` compiles all plugin bodies through the Joomla 6
@@ -209,9 +223,11 @@ and emitted-output tests beside these as their coverage expands.
 `PrivacyCompilerTest` executes emitted privacy export and removal helpers and
 checks their target-specific database and export-object contracts.
 
-The plugin source fixtures are extracted from the supplied generated PHP. They
-are not a substitute for the complete maintained JCB definition package. The
-companion compiler tests cover the `[[[API_ROUTES_METHOD]]]` generation path.
+The plugin source fixtures use the authored regions of the supplied PHP. Standard
+content subscription maps are absent from their inputs; API input retains
+`[[[API_ROUTES_METHOD]]]`. The compiler generates providers, installers and maps.
+These focused fixtures are not a substitute for the complete maintained JCB
+definition package. The companion installed test starts from authored fields too.
 
 Deprecations, including suppressed constructor deprecations, are failures. Test
 observable behavior: field preservation, subscription and dispatch, by-reference

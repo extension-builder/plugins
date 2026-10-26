@@ -35,12 +35,10 @@ use ReflectionProperty;
 use SimpleXMLElement;
 use VDM\Joomla\Componentbuilder\Console\Compiler;
 use VDM\Joomla\Componentbuilder\Factory as ComponentbuilderFactory;
-use VDM\Plugin\Console\ComponentbuilderCommands\Extension\ComponentbuilderCommands;
-use VDM\Plugin\Webservices\ComponentbuilderApiRoutes\Extension\ComponentbuilderApiRoutes;
 
 
 /**
- * Exercise the shipped providers, native installer loader and registered events.
+ * Exercise generated providers, native installer loading and registered events.
  *
  * @since 6.2.0
  */
@@ -55,6 +53,7 @@ final class PluginInfrastructureTest extends PluginTestCase
 	 */
 	public function testNativeProvidersBootAndRegisterWithoutDeprecatedConstruction(): void
 	{
+		$generated = $this->compileSuppliedPlugins();
 		$container = new Container();
 		$database = $this->createStub(DatabaseInterface::class);
 		$container->share(DispatcherInterface::class, $this->dispatcher);
@@ -62,10 +61,10 @@ final class PluginInfrastructureTest extends PluginTestCase
 		$this->setJoomlaContainer($container);
 		(new ReflectionProperty(CMSApplication::class, 'container'))->setValue($this->application, $container);
 		$loadExtension = new ReflectionMethod(CMSApplication::class, 'loadExtension');
-		$this->application->method('bootPlugin')->willReturnCallback(function (string $name, string $group) use ($loadExtension): PluginInterface
+		$this->application->method('bootPlugin')->willReturnCallback(function (string $name, string $group) use ($loadExtension, $generated): PluginInterface
 		{
 			return $loadExtension->invoke($this->application, PluginInterface::class, $name . ':' . $group,
-				JCB_PLUGINS_ROOT . '/plg_' . $group . '_' . $name);
+				$generated[$group . ':' . $name]['folder']);
 		});
 		$extensions = ExtensionHelper::$extensions;
 		$deprecations = [];
@@ -77,19 +76,15 @@ final class PluginInfrastructureTest extends PluginTestCase
 
 		try
 		{
-			$folders = glob(JCB_PLUGINS_ROOT . '/plg_*', GLOB_ONLYDIR);
-			$this->assertNotEmpty($folders);
-			foreach ($folders as $folder)
+			foreach ($generated as $fixture)
 			{
-				[, $group, $name] = explode('_', basename($folder), 3);
-				$manifest = simplexml_load_file($folder . '/' . $name . '.xml');
-				$namespace = (string) $manifest->namespace;
-				$class = $namespace . '\\Extension\\' . substr($namespace, strrpos($namespace, '\\') + 1);
+				$group = $fixture['plugin']->group;
+				$name = $fixture['plugin']->context_name;
 				$record = (object) ['type' => $group, 'name' => $name, 'params' => '{"fixture":"native"}', 'id' => 1];
 				(new ReflectionProperty(PluginHelper::class, 'plugins'))->setValue(null, [$record]);
 				$this->assertTrue(PluginHelper::importPlugin($group, $name, true, $this->dispatcher));
 				$plugin = ExtensionHelper::$extensions[PluginInterface::class][$name . ':' . $group];
-				$this->assertInstanceOf($class, $plugin);
+				$this->assertInstanceOf($fixture['class'], $plugin);
 				$this->assertInstanceOf(SubscriberInterface::class, $plugin);
 				$this->assertSame($this->application, (new ReflectionMethod($plugin, 'getApplication'))->invoke($plugin));
 				$this->assertSame('native', (new ReflectionProperty($plugin, 'params'))->getValue($plugin)->get('fixture'));
@@ -121,6 +116,7 @@ final class PluginInfrastructureTest extends PluginTestCase
 	 */
 	public function testInstallerScriptsLoadNativelyAndPreserveLifecycleResults(): void
 	{
+		$generated = $this->compileSuppliedPlugins();
 		$messages = [];
 		$this->application->method('enqueueMessage')->willReturnCallback(static function (string $message, string $type) use (&$messages): void
 		{
@@ -135,10 +131,13 @@ final class PluginInfrastructureTest extends PluginTestCase
 
 		try
 		{
-			$scripts = glob(JCB_PLUGINS_ROOT . '/plg_*/script.php');
-			$this->assertNotEmpty($scripts);
-			foreach ($scripts as $script)
+			foreach ($generated as $fixture)
 			{
+				$script = $fixture['folder'] . '/script.php';
+				$this->assertCount(1, $fixture['plugin']->remove_file_paths);
+				$obsolete = $fixture['site'] . $fixture['plugin']->remove_file_paths[0];
+				$relativeObsolete = substr($obsolete, strlen($this->temporaryPath()) + 1);
+				$this->writeTemporaryFile($relativeObsolete, 'obsolete plugin entry point');
 				$installer = $this->createStub(Installer::class);
 				$installer->method('getPath')->willReturn(dirname($script));
 				$adapter = $this->createStub(InstallerAdapter::class);
@@ -150,6 +149,7 @@ final class PluginInfrastructureTest extends PluginTestCase
 				$this->assertInstanceOf(InstallerScriptInterface::class, $native);
 				$this->assertSame(realpath($script), (new ReflectionMethod($native, 'preflight'))->getFileName());
 				$this->assertTrue($native->preflight('update', $adapter));
+				$this->assertFileDoesNotExist($obsolete);
 				$this->assertTrue($native->install($adapter));
 				$this->assertTrue($native->update($adapter));
 				$this->assertTrue($native->uninstall($adapter));
@@ -157,9 +157,16 @@ final class PluginInfrastructureTest extends PluginTestCase
 				$this->assertStringContainsString("isCompatible('6.0.0')", file_get_contents($script));
 				if (basename(dirname($script)) === 'plg_console_componentbuildercommands')
 				{
+					$this->writeTemporaryFile($relativeObsolete, 'obsolete plugin entry point');
+					$native = new ($native::class)();
 					$this->assertFalse($native->preflight('install', $adapter));
+					$this->assertFileExists($obsolete);
 					$this->assertSame('error', $messages[0][1]);
 					$this->assertStringContainsString('JCB must first be installed', $messages[0][0]);
+					$this->createTemporaryDirectory(substr($fixture['site'], strlen($this->temporaryPath()) + 1)
+						. '/administrator/components/com_componentbuilder');
+					$this->assertTrue($native->preflight('install', $adapter));
+					$this->assertFileDoesNotExist($obsolete);
 				}
 			}
 		}
@@ -173,6 +180,25 @@ final class PluginInfrastructureTest extends PluginTestCase
 	}
 
 	/**
+	 * Generate all supplied authored definitions before strict runtime checks begin.
+	 *
+	 * @return array Generated plugin trees keyed by group and element.
+	 * @since 6.2.0
+	 */
+	private function compileSuppliedPlugins(): array
+	{
+		$generated = [];
+		foreach (glob(JCB_PLUGINS_ROOT . '/plg_*/src/Extension/*.php') as $file)
+		{
+			$fixture = $this->compiledPlugin($file);
+			$generated[$fixture['plugin']->group . ':' . $fixture['plugin']->context_name] = $fixture;
+		}
+		$this->assertCount(18, $generated);
+
+		return $generated;
+	}
+
+	/**
 	 * The API subscriber registers authenticated CRUD and GUID routes.
 	 *
 	 * @return void
@@ -180,7 +206,8 @@ final class PluginInfrastructureTest extends PluginTestCase
 	 */
 	public function testApiSubscriberRetainsRoutesAndAuthenticationDefaults(): void
 	{
-		$plugin = new ComponentbuilderApiRoutes([]);
+		$class = $this->compiledPlugin('ComponentbuilderApiRoutes')['class'];
+		$plugin = new $class([]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
 		$router = new ApiRouter($this->application);
@@ -189,7 +216,7 @@ final class PluginInfrastructureTest extends PluginTestCase
 			'router' => $router,
 		]));
 		$routes = $router->getRoutes();
-		$this->assertNotEmpty($routes);
+		$this->assertCount(8, $routes);
 		$matched = [];
 		foreach ($routes as $route)
 		{
@@ -222,7 +249,8 @@ final class PluginInfrastructureTest extends PluginTestCase
 		$loader = new WritableContainerLoader($container, []);
 		$container->share(WritableLoaderInterface::class, $loader);
 		$this->setJoomlaContainer($container);
-		$plugin = new ComponentbuilderCommands([]);
+		$class = $this->compiledPlugin('ComponentbuilderCommands')['class'];
+		$plugin = new $class([]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
 		$application = $this->createStub(ConsoleApplication::class);

@@ -1,109 +1,64 @@
-# Joomla 6 plugin infrastructure migration
+# Joomla 6 plugin infrastructure generation
 
-These changes belong to the Joomla 6 versions of the plugins. The plugin
-folders are compiled extension sources; copy authored handler changes into the
-corresponding JCB plugin definitions, and regenerate service providers and
-installer scripts with the Joomla 6 compiler. Do not copy a generated provider
-or installer class into a plugin's `main_class_code` field.
+JCB owns infrastructure for all 18 plugins. This branch changes only authored
+plugin methods and their required imports; the existing `services/provider.php`,
+`script.php`, API route class and generated content class declarations remain the
+original reference output. They are not manually upgraded Joomla 6 packages.
+Apply the [field changes](plugin-definition-fields.md) to maintained JCB records
+and compile the packages with the reviewed Joomla 6 compiler.
 
-## Providers
+## Providers and class structure
 
-Every `plg_*/services/provider.php` now passes the plugin configuration array as
-the only argument to the inherited `CMSPlugin` constructor. Application
-injection and additional service injection, including the Language Packaging
-plugin's database, remain unchanged.
+`Compiler/Architecture/JoomlaSix/Plugin/Provider.php` already constructs the plugin
+with its configuration array, injects the application, and incorporates services
+selected by the plugin loader. The Language Packaging database injection comes
+from that loader's database-trait detection. None of this belongs in a plugin's
+authored methods or custom header.
 
-Joomla 6 supports this constructor directly. Passing the dispatcher as the
-first constructor argument invokes Joomla 6's deprecated compatibility branch.
-The updated provider matches JCB's
-`Compiler/Architecture/JoomlaSix/Plugin/Provider.php` output. Joomla handles
-subscription registration after loading the plugin; the provider does not add
-an alternative registration path.
+`Compiler/JoomlaSix/Header.php` supplies the provider imports. The paired repair
+removes its unused `DispatcherInterface` import; Joomla 3–5 retain their existing
+headers and construction. The interface import itself did not invoke deprecated
+behavior: the obsolete dispatcher-first constructor call was the runtime issue.
 
-## Installer scripts
+`Compiler/Architecture/JoomlaSix/Plugin/Extension.php` emits the class declaration
+and `SubscriberInterface` through Joomla Powers. It generates default subscriptions
+from eligible native `on…` handlers and retains deliberately authored maps. The
+content definitions therefore need their event handlers and required imports,
+not a manually added class declaration or generated subscription method.
 
-Every `plg_*/script.php` now:
+## Installer lifecycle
 
-- implements `InstallerScriptInterface` and returns its instance;
-- has a parameterless constructor, since Joomla supplies the adapter to the
-  lifecycle methods rather than to native script loading;
-- implements typed `install`, `update`, `uninstall`, `preflight` and `postflight`
-  methods;
-- requires Joomla 6.0.0 before removing an obsolete plugin entry file;
-- preserves its existing cleanup paths and the Console Commands plugin's
-  requirement that JCB be installed first.
+`Compiler/Extension/JoomlaSix/InstallScript.php` generates the installer class,
+`InstallerScriptInterface`, constructor, typed lifecycle methods, version check,
+cleanup handling and returned instance. It incorporates the existing configured
+hook bodies while retaining their application/adapter context and return behavior.
 
-The empty install/update/uninstall methods return success, preserving the
-previous absence of custom actions. Returning the interface instance prevents
-Joomla from constructing `LegacyInstallerScript`. These changes match the
-existing Joomla 6 compiler's native installer contract.
+Do not add common initialization, version checks, lifecycle signatures, interface
+methods or success-return boilerplate to preflight/postflight fields. These are
+compiler responsibilities. Preserve the actual custom actions already configured
+for each plugin. The Console Commands preflight-install prerequisite is unchanged;
+the other plugins need no new preflight/postflight snippets for this migration.
 
 ## API and console plugins
 
-`plg_webservices_componentbuilderapiroutes/src/Extension/ComponentbuilderApiRoutes.php`
-already accepted `BeforeApiRouteEvent`. It now explicitly implements
-`SubscriberInterface` and declares the subscription map, removing implicit
-method discovery. The route table is unchanged.
+Keep `[[[API_ROUTES_METHOD]]]` in the webservices plugin's authored body. JCB
+generates routes from the linked component's API configuration, then infers the
+Joomla 6 subscription. Do not paste the expanded route method or its inferred map
+back into the definition. Joomla 5 generation stays unchanged.
 
-That PHP is generated output. The maintained JCB definition contains
-`[[[API_ROUTES_METHOD]]]`; keep it there. The companion Joomla 6 compiler expands
-the route method and supplies the native subscriber contract, while the Joomla 5
-generator retains its existing output. Do not copy this generated method or a
-second subscription map into the definition. Explicitly authored subscription
-maps remain authoritative and must not be overwritten during compilation.
+The console plugin's `application.before_execute` map and command registration
+are deliberately authored and remain unchanged. The seven compiler plugins also
+retain their explicit JCB hook maps and positional/by-reference argument contracts.
 
-The Console Commands handler already subscribes to `application.before_execute`.
-Joomla dispatches an `ApplicationEvent`, which extends the handler's accepted
-`Event` type and provides `getApplication()`. Its command registration and
-container lookup remain unchanged; the provider and installer changes are the
-native Joomla 6 corrections needed for that plugin.
+## Verification and distributions
 
-## Joomla 4 and 5 separation
+Tests generate extension classes, provider headers/bodies and installers through
+the actual J6 compiler into temporary directories before exercising Joomla's
+loader and event dispatch. They must not use manually upgraded infrastructure as
+the implementation under test. The installed companion fixture likewise starts
+with authored content methods and has JCB supply the subscriber and installer.
 
-**All 18 deployable plugin packages in this branch are Joomla 6 packages.**
-Their config-only providers require Joomla 6, and their installers explicitly
-reject Joomla 4 and 5. Keep the previous provider/installer output when
-compiling separately maintained Joomla 4/5 definitions. Do not deploy these
-Joomla 6 folders over an older Joomla installation.
-
-The affected plugin folders are:
-
-- `plg_console_componentbuildercommands`
-- `plg_content_componentbuilderadminheaderstabs`
-- `plg_content_componentbuildercomponentdashboardheaderstabs`
-- `plg_content_componentbuildercomponentheaderstabs`
-- `plg_content_componentbuildercustomadminheaderstabs`
-- `plg_content_componentbuilderdynamicgetheaderstabs`
-- `plg_content_componentbuilderfieldorderingtabs`
-- `plg_content_componentbuilderlanguagetabs`
-- `plg_content_componentbuilderprivacytabs`
-- `plg_content_componentbuildersiteheaderstabs`
-- `plg_extension_componentbuilderactionlogcompiler`
-- `plg_extension_componentbuilderexportcompiler`
-- `plg_extension_componentbuilderfieldorderingcompiler`
-- `plg_extension_componentbuilderheaderscompiler`
-- `plg_extension_componentbuilderlanguagepackaging`
-- `plg_extension_componentbuilderpowersautoloadercompiler`
-- `plg_extension_componentbuilderprivacycompiler`
-- `plg_webservices_componentbuilderapiroutes`
-
-This is a distinction between deployable packages and authored bodies: some
-bodies remain shareable, while native content-event signatures need the
-separate-definition treatment described in the content migration note. A
-Joomla 6 host can still compile Joomla 3–5 targets using the existing target
-providers; the provider change does not alter those compiler services.
-
-## Verification
-
-All 18 service providers and installer scripts pass PHP 8.3 syntax checks.
-`tests/PluginInfrastructureTest.php` passes four tests with 842 assertions on
-PHP 8.3.6 and Joomla 6.1.2. It boots every provider through Joomla's extension
-loader and `PluginHelper`, loads every installer through
-`InstallerAdapter::setupScriptfile()`, checks lifecycle results, dispatches
-API route and console events, and rejects deprecations during provider and
-installer loading. The route assertions retain authenticated defaults and
-the GUID CRUD routes; the console assertions verify command registration.
-
-This tests native loader contracts and event behavior without installing a
-live JCB site. It does not replace staging installation and end-to-end
-component compilation.
+Generated Joomla 6 packages require Joomla 6. Keep existing Joomla 4/5 definitions
+and distributions separate; do not distribute this branch's reference trees as
+completed Joomla 6 builds. Full release regeneration still requires the maintained
+JCB definition package, which is not included in these repositories.

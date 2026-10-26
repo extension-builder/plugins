@@ -11,7 +11,6 @@
 namespace VDM\Plugin\Content\ComponentbuilderFieldOrderingTabs\Extension;
 
 use Joomla\CMS\Event\Model\PrepareFormEvent;
-use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 
@@ -24,7 +23,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderFieldOrderingTabs
  * @since     3.0.1
  */
-final class ComponentbuilderFieldOrderingTabs extends CMSPlugin implements SubscriberInterface
+final class ComponentbuilderFieldOrderingTabs extends CMSPlugin
 {
 	/**
 	 * Affects constructor behaviour. If true, language files will be loaded automatically.
@@ -33,19 +32,6 @@ final class ComponentbuilderFieldOrderingTabs extends CMSPlugin implements Subsc
 	 * @since  1.0
 	 */
 	protected  $autoloadLanguage = true;
-
-	/**
-	 * Get the native Joomla event subscriptions.
-	 *
-	 * @return  array
-	 * @since   6.0.1
-	 */
-	public static function getSubscribedEvents(): array
-	{
-		return [
-			'onContentPrepareForm' => 'onContentPrepareForm',
-		];
-	}
 
 	/**
 	 * Runs on content preparation of form.

@@ -15,6 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Extension\PluginInterface;
+use Joomla\Event\DispatcherInterface;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\DI\Container;
 use VDM\Plugin\Content\ComponentbuilderComponentHeadersTabs\Extension\ComponentbuilderComponentHeadersTabs;
@@ -34,6 +35,7 @@ return new class () implements ServiceProviderInterface {
 			PluginInterface::class,
 			function (Container $container) {
 				$plugin = new ComponentbuilderComponentHeadersTabs(
+					$container->get(DispatcherInterface::class),
 					(array) PluginHelper::getPlugin('content', 'componentbuildercomponentheaderstabs')
 				);
 				$plugin->setApplication(Factory::getApplication());

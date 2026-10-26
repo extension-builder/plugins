@@ -13,7 +13,6 @@ namespace VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Extension;
 use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Event\Model\BeforeSaveEvent;
 use Joomla\CMS\Event\Model\AfterCleanCacheEvent;
-use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
@@ -36,7 +35,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package   ComponentbuilderPrivacyTabs
  * @since     3.0.0
  */
-final class ComponentbuilderPrivacyTabs extends CMSPlugin implements SubscriberInterface
+final class ComponentbuilderPrivacyTabs extends CMSPlugin
 {
 	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
@@ -45,20 +44,6 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin implements SubscriberI
 	 * @since  1.0
 	 */
 	protected  $autoloadLanguage = true;
-
-	/**
-	 * Get the native Joomla event subscriptions.
-	 *
-	 * @return  array
-	 * @since   6.0.1
-	 */
-	public static function getSubscribedEvents(): array
-	{
-		return [
-			'onContentPrepareForm' => 'onContentPrepareForm',
-			'onContentBeforeSave' => 'onContentBeforeSave',
-		];
-	}
 
 	/**
 	 * Runs on content preparation of form.

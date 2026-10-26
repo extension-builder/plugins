@@ -17,7 +17,6 @@ use Joomla\CMS\Form\Form;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
-use VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Extension\ComponentbuilderPrivacyTabs;
 
 
 /**
@@ -60,7 +59,7 @@ final class ContentPluginsTest extends PluginTestCase
 	#[DataProvider('forms')]
 	public function testFormPreparationRetainsFieldsAndEditorSettings(string $name, string $view, string $fieldset): void
 	{
-		$class = 'VDM\\Plugin\\Content\\' . $name . '\\Extension\\' . $name;
+		$class = $this->compiledPlugin($name)['class'];
 		$plugin = new $class(['name' => strtolower($name), 'type' => 'content', 'params' => new Registry(['plugin' => 23])]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
@@ -102,7 +101,8 @@ final class ContentPluginsTest extends PluginTestCase
 	 */
 	public function testPrivacyConfigurationIsAvailableWithoutGlobalPluginSelection(): void
 	{
-		$plugin = new ComponentbuilderPrivacyTabs(['params' => new Registry(['plugin' => 0])]);
+		$class = $this->compiledPlugin('ComponentbuilderPrivacyTabs')['class'];
+		$plugin = new $class(['params' => new Registry(['plugin' => 0])]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
 		$form = new Form('com_componentbuilder.admin_view');
@@ -120,7 +120,8 @@ final class ContentPluginsTest extends PluginTestCase
 	 */
 	public function testPrivacySaveRetainsJsonParametersAndIgnoresOtherComponents(): void
 	{
-		$plugin = new ComponentbuilderPrivacyTabs(['params' => new Registry(['plugin' => 23])]);
+		$class = $this->compiledPlugin('ComponentbuilderPrivacyTabs')['class'];
+		$plugin = new $class(['params' => new Registry(['plugin' => 23])]);
 		$plugin->setApplication($this->application);
 		$this->dispatcher->addSubscriber($plugin);
 		foreach (['com_componentbuilder.admin_view', 'com_content.article'] as $context)
