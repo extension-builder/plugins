@@ -1,2 +1,2 @@
-# plugins
-All component plugins
+# JCB plugins
+All JCB component plugins
