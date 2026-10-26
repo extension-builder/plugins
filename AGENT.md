@@ -35,7 +35,7 @@ Each `plg_<group>_<name>` folder is a deployable generated plugin tree:
 
 | Path within a plugin | Responsibility |
 | --- | --- |
-| `src/Extension/*.php` | Authored plugin behavior: event methods, subscriptions and supporting methods. |
+| `src/Extension/*.php` | Generated plugin classes containing authored behavior and compiler-owned expansions such as `[[[API_ROUTES_METHOD]]]`. |
 | `services/provider.php` | Joomla DI construction and service injection. |
 | `script.php` | Installation/update lifecycle and removal of obsolete entry files. |
 | `<name>.xml` | Plugin metadata, namespace, package contents and configuration fields. |
@@ -50,6 +50,12 @@ imports, forms or configuration changed. Transfer authored code into the matchin
 JCB fields, and regenerate providers/installers through the corresponding
 compiler target. Never paste an entire generated file, provider or installer into
 `main_class_code`.
+
+The API Routes definition uses `[[[API_ROUTES_METHOD]]]`. Preserve that placeholder;
+the compiler generates its version-specific handler and Joomla 6 subscriptions.
+Do not copy the expanded route table or an extra subscription map back into the
+definition. The Joomla 5 generator must retain its existing output. An authored
+custom subscription map remains authoritative.
 
 Use the existing plugin and compiler architecture. Do not introduce a new
 plugin-definition selector, template directory, `.tpl` format, broad source
@@ -196,11 +202,16 @@ The tests exercise real plugin source and forms, not copied replacement
 implementations. `ContentPluginsTest` covers form changes and editor settings;
 `PrivacyTabsTest` covers item/global settings and cache success/failure events;
 `CompilerIntegrationTest` compiles all plugin bodies through the Joomla 6
-extension renderer and Joomla Power injector; `PluginInfrastructureTest` covers
+extension renderer and Joomla Power injector, then dispatches native events into
+the compiled content plugins with their original form XML; `PluginInfrastructureTest` covers
 providers, installers and entry-point integration. Keep additional compiler-hook
 and emitted-output tests beside these as their coverage expands.
 `PrivacyCompilerTest` executes emitted privacy export and removal helpers and
 checks their target-specific database and export-object contracts.
+
+The plugin source fixtures are extracted from the supplied generated PHP. They
+are not a substitute for the complete maintained JCB definition package. The
+companion compiler tests cover the `[[[API_ROUTES_METHOD]]]` generation path.
 
 Deprecations, including suppressed constructor deprecations, are failures. Test
 observable behavior: field preservation, subscription and dispatch, by-reference

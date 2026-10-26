@@ -45,6 +45,13 @@ already accepted `BeforeApiRouteEvent`. It now explicitly implements
 `SubscriberInterface` and declares the subscription map, removing implicit
 method discovery. The route table is unchanged.
 
+That PHP is generated output. The maintained JCB definition contains
+`[[[API_ROUTES_METHOD]]]`; keep it there. The companion Joomla 6 compiler expands
+the route method and supplies the native subscriber contract, while the Joomla 5
+generator retains its existing output. Do not copy this generated method or a
+second subscription map into the definition. Explicitly authored subscription
+maps remain authoritative and must not be overwritten during compilation.
+
 The Console Commands handler already subscribes to `application.before_execute`.
 Joomla dispatches an `ApplicationEvent`, which extends the handler's accepted
 `Event` type and provides `getApplication()`. Its command registration and
