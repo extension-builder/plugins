@@ -59,7 +59,13 @@ final class CompilerIntegrationTest extends PluginTestCase
 	#[DataProvider('plugins')]
 	public function testPluginDefinitionCompilesWithoutLegacyListenerAdapters(string $file): void
 	{
-		$this->compiledPlugin($file);
+		$fixture = $this->compiledPlugin($file);
+		if ($fixture['plugin']->group === 'extension')
+		{
+			preg_match_all('/public function (jcb_ce_[a-zA-Z0-9_]+)\(/', file_get_contents($file), $hooks);
+			$this->assertNotEmpty($hooks[1]);
+			$this->assertSame(array_combine($hooks[1], $hooks[1]), $fixture['class']::getSubscribedEvents());
+		}
 	}
 
 	/**

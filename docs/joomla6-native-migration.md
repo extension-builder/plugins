@@ -18,7 +18,8 @@ definition fields; shared class, provider and lifecycle structure belongs in JCB
    not update a previously stored plugin body.
 2. Apply the Privacy Tabs save/cache methods and Privacy Compiler emitters listed
    there. The emitters select native APIs for target 6 while preserving targets
-   3–5. Existing explicit console/compiler hook maps remain unchanged.
+   3–5. Preserve the explicit console map; let JCB generate `jcb_ce_*`
+   subscription maps from the compiler plugins' authored handlers.
 3. Keep `[[[API_ROUTES_METHOD]]]` in the API Routes body. JCB expands the linked
    component's routes and generates the J6 subscriber contract. Do not add the
    generated route method, class declaration or inferred subscription map to the
@@ -53,7 +54,8 @@ its earlier-target output, and component-linked API tests compare complete Jooml
 The plugin suite compiles authored bodies and imports into temporary Joomla 6
 classes and infrastructure before testing form mutations, cache behavior,
 providers, native installers and event dispatch. Standard content subscription
-maps are absent from the inputs; the API input retains its route placeholder.
+maps and historical generated compiler-hook maps are absent from the inputs;
+the deliberate console map remains, and the API input retains its route placeholder.
 No generic lifecycle boilerplate is added to authored snippets.
 
 The companion installed fixture stores the actual authored content body in a

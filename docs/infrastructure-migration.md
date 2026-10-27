@@ -22,7 +22,9 @@ behavior: the obsolete dispatcher-first constructor call was the runtime issue.
 
 `Compiler/Architecture/JoomlaSix/Plugin/Extension.php` emits the class declaration
 and `SubscriberInterface` through Joomla Powers. It generates default subscriptions
-from eligible native `on…` handlers and retains deliberately authored maps. The
+from eligible native `on…` handlers and JCB `jcb_ce_*` compiler hooks, and retains
+deliberately authored maps. Compiler hooks keep their positional/by-reference
+arguments; Joomla handlers keep the typed-event contract. The
 content definitions therefore need their event handlers and required imports,
 not a manually added class declaration or generated subscription method.
 
@@ -47,8 +49,10 @@ Joomla 6 subscription. Do not paste the expanded route method or its inferred ma
 back into the definition. Joomla 5 generation stays unchanged.
 
 The console plugin's `application.before_execute` map and command registration
-are deliberately authored and remain unchanged. The seven compiler plugins also
-retain their explicit JCB hook maps and positional/by-reference argument contracts.
+are deliberately authored and remain unchanged. For the seven compiler plugins,
+JCB generates the JCB hook maps from their authored `jcb_ce_*` methods while
+preserving positional/by-reference argument contracts. Their historical maps in
+this reference tree are generated infrastructure, not required GUI input.
 
 ## Verification and distributions
 

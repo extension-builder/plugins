@@ -12,7 +12,11 @@ The compiled content classes are also dispatched through Joomla's real event
 dispatcher with their original form XML in the generated directory structure.
 This verifies that code generation preserves working handlers, field/editor
 changes and the Privacy Tabs item mutation. Inputs contain no generated default
-subscription maps. Existing authored console/compiler maps are retained.
+subscription maps. Historical generated maps in the seven compiler plugins are
+removed from fixture inputs too; the intentional console map is retained.
+The Headers Compiler regression boots its generated provider, imports the plugin
+through Joomla and runs real compiler hooks, checking Form/Session/SearchFactory
+imports and the selected Search Power root passed to the loader.
 These focused fixtures use authored regions of the supplied PHP; they do not
 claim to be a complete maintained database export. API input starts with
 `[[[API_ROUTES_METHOD]]]` and representative component API settings, exercising
@@ -23,7 +27,7 @@ prerequisite snippet. No generic preflight/postflight additions are supplied.
 
 The compiler, test support and Composer dependencies come from one reviewed JCB
 checkout. This avoids maintaining a second copy of its dependency graph. CI
-pins JCB at `fde580d0b68f21987358407a123cd5d119fccdfa`, Joomla CMS at the 6.1.2
+pins JCB at `b62b40297cb98d80497e697900c3a0ca46772535`, Joomla CMS at the 6.1.2
 source revision, and installs JCB's committed Composer lock. The plugin code
 under test always comes from the current checkout. Network access occurs only
 during setup, never during a test.
@@ -32,7 +36,7 @@ With PHP 8.3 or 8.4 and Composer 2 installed, prepare the runtime once:
 
 ```bash
 git clone --no-checkout https://github.com/extension-builder/joomla.git .runtime/jcb
-git -C .runtime/jcb checkout fde580d0b68f21987358407a123cd5d119fccdfa
+git -C .runtime/jcb checkout b62b40297cb98d80497e697900c3a0ca46772535
 git clone --branch 6.1.2 --depth 1 https://github.com/joomla/joomla-cms.git \
   .runtime/jcb/libraries/vendor_jcb/tests/.runtime/joomla-cms
 composer --working-dir=.runtime/jcb/libraries/vendor_jcb/tests install

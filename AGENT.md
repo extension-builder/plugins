@@ -22,6 +22,9 @@ changed its execution timing. Follow the paired changes:
   packages; exact field instructions for transferring changes into JCB definitions.
 - [Compiler PR #61](https://github.com/extension-builder/joomla/pull/61): compiler
   fixes and regression coverage, including JavaScript loading and diagnostics.
+- [Compiler PR #62](https://github.com/extension-builder/joomla/pull/62): generate
+  the JCB compiler-hook subscription maps from authored methods and repair the
+  verified self-compilation regressions.
 
 Start with [the migration and transfer plan](docs/joomla6-native-migration.md), then
 read the [content](docs/content-plugin-migration.md),
@@ -114,8 +117,10 @@ cache locations, item mutations and failure notifications.
 ### Extension plugins: compiler hooks
 
 Every plugin below lives in `plg_extension_<name>`. The hook names in this table
-have the prefix **`jcb_ce_`**. Their explicit `getSubscribedEvents()` maps are part
-of the contract.
+have the prefix **`jcb_ce_`**. JCB generates their `getSubscribedEvents()` maps
+from these authored handlers. The emitted map entries are part of the runtime
+contract; do not copy the generated maps into the GUI method fields. An
+intentionally authored custom map remains authoritative.
 
 | Plugin name | Subscribed hook suffixes | Reads, mutations and output |
 | --- | --- | --- |
@@ -220,11 +225,14 @@ extension renderer and Joomla Power injector, then dispatches native events into
 the compiled content plugins with their original form XML; `PluginInfrastructureTest` covers
 providers, installers and entry-point integration. Keep additional compiler-hook
 and emitted-output tests beside these as their coverage expands.
-`PrivacyCompilerTest` executes emitted privacy export and removal helpers and
+`HeadersCompilerTest` boots the generated provider and runs the real compiler
+event/header path, preserving Form/Session/SearchFactory imports and selected
+Power roots. `PrivacyCompilerTest` executes emitted privacy export and removal helpers and
 checks their target-specific database and export-object contracts.
 
 The plugin source fixtures use the authored regions of the supplied PHP. Standard
-content subscription maps are absent from their inputs; API input retains
+content and compiler `jcb_ce_*` subscription maps are absent from their inputs;
+the authored console map remains present, and API input retains
 `[[[API_ROUTES_METHOD]]]`. The compiler generates providers, installers and maps.
 These focused fixtures are not a substitute for the complete maintained JCB
 definition package. The companion installed test starts from authored fields too.
