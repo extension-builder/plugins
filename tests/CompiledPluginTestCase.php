@@ -80,10 +80,6 @@ abstract class CompiledPluginTestCase extends ArchitectureTestCase
 			$body = $this->withoutGeneratedCompilerSubscriptions($body);
 		}
 		$imports = $group === 'webservices' ? '' : implode(PHP_EOL, $parser->getUseStatements($source));
-		if ($group === 'extension')
-		{
-			$imports = str_replace('use Joomla\\Event\\SubscriberInterface;', '', $imports);
-		}
 		if ($group === 'content')
 		{
 			$this->assertStringNotContainsString('function getSubscribedEvents', $body);
