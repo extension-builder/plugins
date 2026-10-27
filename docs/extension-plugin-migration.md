@@ -1,8 +1,15 @@
 # Compiler extension plugin review
 
-The seven `plg_extension_componentbuilder*` plugins already implement
-`Joomla\Event\SubscriberInterface` and declare their JCB compiler hooks in
-`getSubscribedEvents()`. Their positional and by-reference parameters are an
+[Compiler PR #62](https://github.com/extension-builder/joomla/pull/62) fixes the
+J6 generator that omitted all 26 compiler-hook registrations across these seven
+plugins. Recompile and reinstall them with the corrected compiler; changing
+their enabled state cannot repair an empty generated subscription map.
+
+JCB generates `Joomla\Event\SubscriberInterface` and `getSubscribedEvents()`
+for the seven `plg_extension_componentbuilder*` plugins from their authored
+`jcb_ce_*` handlers. Do not copy the reference trees' generated maps into the
+plugin GUI. Deliberately authored custom maps remain authoritative.
+Their positional and by-reference parameters are an
 intentional JCB contract: the host-specific compiler `Event::trigger()` calls
 the registered listeners with the original arguments. These hooks do not use
 Joomla's deprecated automatic legacy-listener registration. Their names,
@@ -54,11 +61,11 @@ installation requirements are documented separately.
 | Plugin | Finding |
 | --- | --- |
 | ActionLogCompiler | Its deprecated database calls belong to the Joomla 3 output methods. Targets 4–6 already use the component installer's native action-log helpers. |
-| ExportCompiler | Explicit JCB subscriptions already preserve the required component/configuration mutations. |
-| FieldOrderingCompiler | Explicit JCB subscription already preserves the by-reference view mutation. |
-| HeadersCompiler | Explicit JCB subscriptions and generated header/Power handling remain authoritative. |
-| LanguagePackaging | Explicit JCB subscriptions and the injected database trait remain in place. |
-| PowersAutoloaderCompiler | Explicit JCB subscription already uses the existing compiler services. |
+| ExportCompiler | Generated JCB subscriptions already preserve the required component/configuration mutations. |
+| FieldOrderingCompiler | Generated JCB subscription already preserves the by-reference view mutation. |
+| HeadersCompiler | Generated JCB subscriptions and generated header/Power handling remain authoritative. |
+| LanguagePackaging | Generated JCB subscriptions and the injected database trait remain in place. |
+| PowersAutoloaderCompiler | Generated JCB subscription already uses the existing compiler services. |
 
 This review does not replace full compilation of the maintainer's complete JCB
 definition package. Regression tests exercise the actual plugin classes and
