@@ -32,7 +32,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder Privacy Compiler plugin.
  *
  * @package   ComponentbuilderPrivacyCompiler
- * @since     3.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements SubscriberInterface
 {
@@ -261,6 +261,18 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 				CompilerFactory::_('Language')->set('site', $key, $string);
 			}
 		}
+	}
+
+	/**
+	 * Select native APIs for the generated Joomla 6 target only.
+	 *
+	 * @return  bool
+	 *
+	 * @since   6.2.0
+	 */
+	protected function isJoomlaSixTarget(): bool
+	{
+		return (int) CompilerFactory::_('Config')->get('joomla_version', 3) === 6;
 	}
 
 	/**
@@ -829,32 +841,19 @@ final class ComponentbuilderPrivacyCompiler extends CMSPlugin implements Subscri
 	}
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onBeforeModelViewData' => 'jcb_ce_onBeforeModelViewData',
-			'jcb_ce_onAfterGet' => 'jcb_ce_onAfterGet',
-			'jcb_ce_onBeforeUpdateFiles' => 'jcb_ce_onBeforeUpdateFiles',
-			'jcb_ce_onBeforeSetLangFileData' => 'jcb_ce_onBeforeSetLangFileData'
-		];
-	}
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
 
-	/**
-	 * Select native APIs for the generated Joomla 6 target only.
-	 *
-	 * @return  bool
-	 *
-	 * @since   6.2.0
-	 */
-	protected function isJoomlaSixTarget(): bool
-	{
-		return (int) CompilerFactory::_('Config')->get('joomla_version', 3) === 6;
+		$events['jcb_ce_onBeforeModelViewData'] = 'jcb_ce_onBeforeModelViewData';
+		$events['jcb_ce_onAfterGet'] = 'jcb_ce_onAfterGet';
+		$events['jcb_ce_onBeforeUpdateFiles'] = 'jcb_ce_onBeforeUpdateFiles';
+		$events['jcb_ce_onBeforeSetLangFileData'] = 'jcb_ce_onBeforeSetLangFileData';
+		return $events;
 	}
-
 }

@@ -13,17 +13,19 @@ namespace VDM\Plugin\Content\ComponentbuilderPrivacyTabs\Extension;
 use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Event\Model\BeforeSaveEvent;
 use Joomla\CMS\Event\Model\AfterCleanCacheEvent;
+use Joomla\CMS\Cache\CacheControllerFactoryInterface;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Factory;
 use VDM\Joomla\Utilities\JsonHelper;
 use VDM\Joomla\Utilities\ArrayHelper;
+use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Table\Extension;
 use Joomla\Database\DatabaseInterface;
 use Joomla\CMS\Cache\Controller\CallbackController;
-use Joomla\CMS\Cache\CacheControllerFactoryInterface;
 use Joomla\CMS\Cache\Exception\CacheExceptionInterface;
 
 // No direct access to this file
@@ -33,9 +35,9 @@ defined('_JEXEC') or die('Restricted access');
  * Content - Componentbuilder Privacy Tabs plugin.
  *
  * @package   ComponentbuilderPrivacyTabs
- * @since     3.0.0
+ * @since     6.0.0
  */
-final class ComponentbuilderPrivacyTabs extends CMSPlugin
+final class ComponentbuilderPrivacyTabs extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * Affects constructor behavior. If true, language files will be loaded automatically.
@@ -95,6 +97,7 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 	{
 		$context = $event->getContext();
 		$item = $event->getItem();
+
 		// When this is componentbuilder admin view
 		if ('com_componentbuilder.admin_view' === $context)
 		{
@@ -157,8 +160,7 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 		try
 		{
 			/** @var CallbackController $cache */
-			$cache = Factory::getContainer()->get(CacheControllerFactoryInterface::class)
-				->createCacheController('callback', $options);
+			$cache = $cache = Factory::getContainer()->get(CacheControllerFactoryInterface::class)->createCacheController('callback', $options);
 			$cache->clean();
 		}
 		catch (CacheExceptionInterface $exception)
@@ -171,5 +173,20 @@ final class ComponentbuilderPrivacyTabs extends CMSPlugin
 			'onContentCleanCache',
 			new AfterCleanCacheEvent('onContentCleanCache', $options)
 		);
+	}
+
+	/**
+	 * Native event subscriptions.
+	 *
+	 * @return array
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['onContentPrepareForm'] = 'onContentPrepareForm';
+		$events['onContentBeforeSave'] = 'onContentBeforeSave';
+		return $events;
 	}
 }

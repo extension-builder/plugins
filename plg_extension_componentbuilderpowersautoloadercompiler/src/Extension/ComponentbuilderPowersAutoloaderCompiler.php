@@ -24,7 +24,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder Powers Autoloader Compiler plugin.
  *
  * @package   ComponentbuilderPowersAutoloaderCompiler
- * @since     3.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderPowersAutoloaderCompiler extends CMSPlugin implements SubscriberInterface
 {
@@ -110,16 +110,16 @@ final class ComponentbuilderPowersAutoloaderCompiler extends CMSPlugin implement
 
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onAfterGet' => 'jcb_ce_onAfterGet'
-		];
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['jcb_ce_onAfterGet'] = 'jcb_ce_onAfterGet';
+		return $events;
 	}
 }

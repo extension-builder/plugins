@@ -34,7 +34,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder ActionLog Compiler plugin.
  *
  * @package   ComponentbuilderActionLogCompiler
- * @since     4.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderActionLogCompiler extends CMSPlugin implements SubscriberInterface
 {
@@ -549,18 +549,18 @@ final class ComponentbuilderActionLogCompiler extends CMSPlugin implements Subsc
 
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onAfterGetComponentData' => 'jcb_ce_onAfterGetComponentData',
-			'jcb_ce_onAfterBuildFilesContent' => 'jcb_ce_onAfterBuildFilesContent',
-			'jcb_ce_onAfterModelViewData' => 'jcb_ce_onAfterModelViewData'
-		];
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['jcb_ce_onAfterGetComponentData'] = 'jcb_ce_onAfterGetComponentData';
+		$events['jcb_ce_onAfterBuildFilesContent'] = 'jcb_ce_onAfterBuildFilesContent';
+		$events['jcb_ce_onAfterModelViewData'] = 'jcb_ce_onAfterModelViewData';
+		return $events;
 	}
 }

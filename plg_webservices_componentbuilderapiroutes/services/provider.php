@@ -15,7 +15,6 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Extension\PluginInterface;
-use Joomla\Event\DispatcherInterface;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\DI\Container;
 use VDM\Plugin\Webservices\ComponentbuilderApiRoutes\Extension\ComponentbuilderApiRoutes;
@@ -35,7 +34,6 @@ return new class () implements ServiceProviderInterface {
 			PluginInterface::class,
 			function (Container $container) {
 				$plugin = new ComponentbuilderApiRoutes(
-					$container->get(DispatcherInterface::class),
 					(array) PluginHelper::getPlugin('webservices', 'componentbuilderapiroutes')
 				);
 				$plugin->setApplication(Factory::getApplication());

@@ -13,6 +13,7 @@ namespace VDM\Plugin\Content\ComponentbuilderFieldOrderingTabs\Extension;
 use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Event\SubscriberInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -21,9 +22,9 @@ defined('_JEXEC') or die('Restricted access');
  * Content - Componentbuilder Field Ordering Tabs plugin.
  *
  * @package   ComponentbuilderFieldOrderingTabs
- * @since     3.0.1
+ * @since     6.0.0
  */
-final class ComponentbuilderFieldOrderingTabs extends CMSPlugin
+final class ComponentbuilderFieldOrderingTabs extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * Affects constructor behaviour. If true, language files will be loaded automatically.
@@ -55,6 +56,19 @@ final class ComponentbuilderFieldOrderingTabs extends CMSPlugin
 			// add the admin view params for privacy integration
 			$form->loadFile('admin_view');
 		}
+	}
 
+	/**
+	 * Native event subscriptions.
+	 *
+	 * @return array
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['onContentPrepareForm'] = 'onContentPrepareForm';
+		return $events;
 	}
 }

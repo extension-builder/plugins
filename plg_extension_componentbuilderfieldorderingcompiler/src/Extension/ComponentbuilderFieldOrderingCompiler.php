@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder Field Ordering Compiler plugin.
  *
  * @package   ComponentbuilderFieldOrderingCompiler
- * @since     3.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderFieldOrderingCompiler extends CMSPlugin implements SubscriberInterface
 {
@@ -55,16 +55,16 @@ final class ComponentbuilderFieldOrderingCompiler extends CMSPlugin implements S
 	}
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onBeforeModelViewData' => 'jcb_ce_onBeforeModelViewData'
-		];
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['jcb_ce_onBeforeModelViewData'] = 'jcb_ce_onBeforeModelViewData';
+		return $events;
 	}
 }

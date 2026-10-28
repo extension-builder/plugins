@@ -28,7 +28,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder Headers Compiler plugin.
  *
  * @package   ComponentbuilderHeadersCompiler
- * @since     4.0.1
+ * @since     6.0.0
  */
 final class ComponentbuilderHeadersCompiler extends CMSPlugin implements SubscriberInterface
 {
@@ -733,22 +733,22 @@ final class ComponentbuilderHeadersCompiler extends CMSPlugin implements Subscri
 	}
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onBeforeModelViewData' => 'jcb_ce_onBeforeModelViewData',
-			'jcb_ce_onBeforeModelCustomViewData' => 'jcb_ce_onBeforeModelCustomViewData',
-			'jcb_ce_onBeforeModelDynamicGetData' => 'jcb_ce_onBeforeModelDynamicGetData',
-			'jcb_ce_onBeforeModelComponentData' => 'jcb_ce_onBeforeModelComponentData',
-			'jcb_ce_setClassHeader' => 'jcb_ce_setClassHeader',
-			'jcb_ce_onBeforeGetComponentData' => 'jcb_ce_onBeforeGetComponentData',
-			'jcb_ce_onAfterGetComponentData' => 'jcb_ce_onAfterGetComponentData'
-		];
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['jcb_ce_onBeforeModelViewData'] = 'jcb_ce_onBeforeModelViewData';
+		$events['jcb_ce_onBeforeModelCustomViewData'] = 'jcb_ce_onBeforeModelCustomViewData';
+		$events['jcb_ce_onBeforeModelDynamicGetData'] = 'jcb_ce_onBeforeModelDynamicGetData';
+		$events['jcb_ce_onBeforeModelComponentData'] = 'jcb_ce_onBeforeModelComponentData';
+		$events['jcb_ce_setClassHeader'] = 'jcb_ce_setClassHeader';
+		$events['jcb_ce_onBeforeGetComponentData'] = 'jcb_ce_onBeforeGetComponentData';
+		$events['jcb_ce_onAfterGetComponentData'] = 'jcb_ce_onAfterGetComponentData';
+		return $events;
 	}
 }

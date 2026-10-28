@@ -41,7 +41,7 @@ defined('_JEXEC') or die('Restricted access');
  * Console - ComponentbuilderCommands plugin.
  *
  * @package   ComponentbuilderCommands
- * @since     1.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderCommands extends CMSPlugin implements SubscriberInterface
 {

@@ -15,6 +15,7 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Version;
 use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Installer\InstallerScriptInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
@@ -24,7 +25,7 @@ use Joomla\Filesystem\Folder;
  *
  * @package ComponentbuilderComponentDashboardHeadersTabs
  */
-class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
+class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript implements InstallerScriptInterface
 {
 	/**
 	 * The CMS Application.
@@ -52,9 +53,8 @@ class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
 	/**
 	 * Constructor
 	 *
-	 * @param   InstallerAdapter  $adapter  The object responsible for running this script
 	 */
-	public function __construct($adapter)
+	public function __construct()
 	{
 		// get application
 		$this->app = Factory::getApplication();
@@ -66,6 +66,92 @@ class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
 	}
 
 	/**
+	 * Called on install
+	 *
+	 * @param   InstallerAdapter  $adapter  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
+	 */
+	public function install(InstallerAdapter $adapter): bool
+	{
+		$result = $this->installHook($adapter);
+
+		// A hook with no return value completed successfully; explicit failures remain failures.
+		return $result === null ? true : (bool) $result;
+	}
+
+	/**
+	 * Run the install hook and preserve its explicit return value.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  mixed
+	 * @since   6.2.0
+	 */
+	private function installHook(InstallerAdapter $adapter)
+	{
+
+		return true;
+	}
+
+	/**
+	 * Called on update
+	 *
+	 * @param   InstallerAdapter  $adapter  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
+	 */
+	public function update(InstallerAdapter $adapter): bool
+	{
+		$result = $this->updateHook($adapter);
+
+		// A hook with no return value completed successfully; explicit failures remain failures.
+		return $result === null ? true : (bool) $result;
+	}
+
+	/**
+	 * Run the update hook and preserve its explicit return value.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  mixed
+	 * @since   6.2.0
+	 */
+	private function updateHook(InstallerAdapter $adapter)
+	{
+
+		return true;
+	}
+
+	/**
+	 * Called on uninstall
+	 *
+	 * @param   InstallerAdapter  $adapter  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
+	 */
+	public function uninstall(InstallerAdapter $adapter): bool
+	{
+		$result = $this->uninstallHook($adapter);
+
+		// A hook with no return value completed successfully; explicit failures remain failures.
+		return $result === null ? true : (bool) $result;
+	}
+
+	/**
+	 * Run the uninstall hook and preserve its explicit return value.
+	 *
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  mixed
+	 * @since   6.2.0
+	 */
+	private function uninstallHook(InstallerAdapter $adapter)
+	{
+
+	}
+
+	/**
 	 * Called before any type of action
 	 *
 	 * @param   string  $route  Which action is happening (install|uninstall|discover_install|update)
@@ -73,16 +159,33 @@ class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function preflight($route, $adapter)
+	public function preflight(string $route, InstallerAdapter $adapter): bool
 	{
-		// set application to local method var, just use $this->app in future [we will drop $app in J6]
+		$result = $this->preflightHook($route, $adapter);
+
+		// A hook with no return value completed successfully; explicit failures remain failures.
+		return $result === null ? true : (bool) $result;
+	}
+
+	/**
+	 * Run the preflight hook and preserve its explicit return value.
+	 *
+	 * @param   string            $route    The installation operation.
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  mixed
+	 * @since   6.2.0
+	 */
+	private function preflightHook(string $route, InstallerAdapter $adapter)
+	{
+		// retain the application variable available to configured hook bodies
 		$app = $this->app;
 
 		// the default for both install and update
 		$jversion = new Version();
-		if (!$jversion->isCompatible('5.0.0'))
+		if (!$jversion->isCompatible('6.0.0'))
 		{
-			$app->enqueueMessage('Please upgrade to at least Joomla! 5.0.0 before continuing!', 'error');
+			$app->enqueueMessage('Please upgrade to at least Joomla! 6.0.0 before continuing!', 'error');
 			return false;
 		}
 
@@ -100,9 +203,26 @@ class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function postflight($route, $adapter)
+	public function postflight(string $route, InstallerAdapter $adapter): bool
 	{
-		// set application to local method var, just use $this->app in future [we will drop $app in J6]
+		$result = $this->postflightHook($route, $adapter);
+
+		// A hook with no return value completed successfully; explicit failures remain failures.
+		return $result === null ? true : (bool) $result;
+	}
+
+	/**
+	 * Run the postflight hook and preserve its explicit return value.
+	 *
+	 * @param   string            $route    The installation operation.
+	 * @param   InstallerAdapter  $adapter  The calling installer adapter.
+	 *
+	 * @return  mixed
+	 * @since   6.2.0
+	 */
+	private function postflightHook(string $route, InstallerAdapter $adapter)
+	{
+		// retain the application variable available to configured hook bodies
 		$app = $this->app;
 
 		return true;
@@ -139,3 +259,5 @@ class plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript
 		}
 	}
 }
+
+return new plgContentComponentbuilderComponentDashboardHeadersTabsInstallerScript();

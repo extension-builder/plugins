@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="6.0" group="console" method="upgrade">
 	<name>PLG_CONSOLE_COMPONENTBUILDERCOMMANDS</name>
-	<creationDate>8th October, 2026</creationDate>
+	<creationDate>28th October, 2026</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
 	<authorUrl>https://dev.vdm.io</authorUrl>

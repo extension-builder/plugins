@@ -10,9 +10,10 @@
  */
 namespace VDM\Plugin\Content\ComponentbuilderLanguageTabs\Extension;
 
-use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Form\Form;
+use Joomla\Event\SubscriberInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -21,9 +22,9 @@ defined('_JEXEC') or die('Restricted access');
  * Content - Componentbuilder Language Tabs plugin.
  *
  * @package   ComponentbuilderLanguageTabs
- * @since     3.0.0
+ * @since     6.0.0
  */
-final class ComponentbuilderLanguageTabs extends CMSPlugin
+final class ComponentbuilderLanguageTabs extends CMSPlugin implements SubscriberInterface
 {
 	/**
 	 * Affects constructor behaviour. If true, language files will be loaded automatically.
@@ -57,4 +58,18 @@ final class ComponentbuilderLanguageTabs extends CMSPlugin
 		}
 	}
 
+
+	/**
+	 * Native event subscriptions.
+	 *
+	 * @return array
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['onContentPrepareForm'] = 'onContentPrepareForm';
+		return $events;
+	}
 }

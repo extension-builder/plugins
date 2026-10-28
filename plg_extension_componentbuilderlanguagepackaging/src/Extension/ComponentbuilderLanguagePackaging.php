@@ -31,7 +31,7 @@ defined('_JEXEC') or die('Restricted access');
  * Extension - Componentbuilder Language Packaging plugin.
  *
  * @package   ComponentbuilderLanguagePackaging
- * @since     3.0.0
+ * @since     6.0.0
  */
 final class ComponentbuilderLanguagePackaging extends CMSPlugin implements SubscriberInterface
 {
@@ -676,21 +676,21 @@ final class ComponentbuilderLanguagePackaging extends CMSPlugin implements Subsc
 	}
 
 	/**
-	 * Returns an array of events this subscriber will listen to.
+	 * Native event subscriptions.
 	 *
-	 * @return  array
-	 *
-	 * @since   5.0.0
+	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
-		return [
-			'jcb_ce_onBeforeModelComponentData' => 'jcb_ce_onBeforeModelComponentData',
-			'jcb_ce_onAfterGet' => 'jcb_ce_onAfterGet',
-			'jcb_ce_onBeforeSetLangFileData' => 'jcb_ce_onBeforeSetLangFileData',
-			'jcb_ce_onBeforeBuildPluginLangFiles' => 'jcb_ce_onBeforeBuildPluginLangFiles',
-			'jcb_ce_onBeforeBuildModuleLangFiles' => 'jcb_ce_onBeforeBuildModuleLangFiles',
-			'jcb_ce_onBeforeBuildAllLangFiles' => 'jcb_ce_onBeforeBuildAllLangFiles'
-		];
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['jcb_ce_onBeforeModelComponentData'] = 'jcb_ce_onBeforeModelComponentData';
+		$events['jcb_ce_onAfterGet'] = 'jcb_ce_onAfterGet';
+		$events['jcb_ce_onBeforeSetLangFileData'] = 'jcb_ce_onBeforeSetLangFileData';
+		$events['jcb_ce_onBeforeBuildPluginLangFiles'] = 'jcb_ce_onBeforeBuildPluginLangFiles';
+		$events['jcb_ce_onBeforeBuildModuleLangFiles'] = 'jcb_ce_onBeforeBuildModuleLangFiles';
+		$events['jcb_ce_onBeforeBuildAllLangFiles'] = 'jcb_ce_onBeforeBuildAllLangFiles';
+		return $events;
 	}
 }

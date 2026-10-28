@@ -15,6 +15,7 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Component\ComponentHelper;
 use VDM\Joomla\Utilities\ArrayHelper;
+use Joomla\Event\SubscriberInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -23,9 +24,9 @@ defined('_JEXEC') or die('Restricted access');
  * Content - Componentbuilder Custom Admin Headers Tabs plugin.
  *
  * @package   ComponentbuilderCustomAdminHeadersTabs
- * @since     4.0.0
+ * @since     6.0.0
  */
-final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
+final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin implements SubscriberInterface
 {
 
 	/**
@@ -35,6 +36,7 @@ final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
 	 * @since  1.0
 	 */
 	protected  $autoloadLanguage = true;
+
 
 	/**
 	 * Runs on content preparation of form.
@@ -71,5 +73,19 @@ final class ComponentbuilderCustomAdminHeadersTabs extends CMSPlugin
 				}
 			}
 		}
+	}
+
+	/**
+	 * Native event subscriptions.
+	 *
+	 * @return array
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		$events = is_subclass_of(parent::class, SubscriberInterface::class)
+			? parent::getSubscribedEvents() : [];
+
+		$events['onContentPrepareForm'] = 'onContentPrepareForm';
+		return $events;
 	}
 }
